@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import io.ipdata.client.error.IpdataException;
 import io.ipdata.client.model.IpdataModel;
 import java.util.Arrays;
+import java.util.List;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
@@ -26,6 +27,11 @@ class IpdataServiceSupport implements IpdataService {
   @Delegate(types = IpdataInternalSingleFieldClient.class)
   private IpdataInternalSingleFieldClient getApi() {
     return singleFieldClient;
+  }
+
+  @Override
+  public IpdataModel[] bulkIpdataAsArray(List<String> ips) throws IpdataException {
+    return bulkIpdata(ips).toArray(new IpdataModel[0]);
   }
 
   @Override

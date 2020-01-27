@@ -11,5 +11,7 @@ public interface IpdataService extends IpdataInternalSingleFieldClient {
 
   List<IpdataModel> bulkIpdata(List<String> ips) throws IpdataException;
 
+  IpdataModel[] bulkIpdataAsArray(List<String> ips) throws IpdataException;
+
   IpdataModel getFields(String ip, IpdataField<?>... fields) throws IpdataException;
 }

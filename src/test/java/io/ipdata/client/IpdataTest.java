@@ -2,6 +2,7 @@ package io.ipdata.client;
 
 import io.ipdata.client.service.IpdataService;
 import java.net.URL;
+import java.util.Arrays;
 import lombok.SneakyThrows;
 import org.junit.Test;
 
@@ -16,9 +17,10 @@ public class IpdataTest {
     IpdataService ipdataService = Ipdata.builder()
       .url(url)
       .withDefaultCache()
-      .key(KEY)
+      .key("a5b48c8ef0fbd95d8f08cec5e8fe0c25fc5a5ff0cdbefe7327793438")
       .get();
-    System.out.println(ipdataService.ipdata("104.238.59.4"));
+    //ipdataService.bulkIpdata(Arrays.asList("104.238.59.4"));
+    System.out.println(ipdataService.bulkIpdata(Arrays.asList("104.238.59.4")));
   }
 
 }
