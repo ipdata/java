@@ -14,11 +14,13 @@ public class IpdataTest {
   @SneakyThrows
   public void test() {
     URL url = new URL("https://api.ipdata.co");
+
     IpdataService ipdataService = Ipdata.builder()
       .url(url)
       .withDefaultCache()
-      .key("a5b48c8ef0fbd95d8f08cec5e8fe0c25fc5a5ff0cdbefe7327793438")
+      .key(KEY)
       .get();
+    ipdataService.
     //ipdataService.bulkIpdata(Arrays.asList("104.238.59.4"));
     System.out.println(ipdataService.bulkIpdata(Arrays.asList("104.238.59.4")));
   }
