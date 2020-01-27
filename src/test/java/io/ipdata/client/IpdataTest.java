@@ -20,8 +20,6 @@ public class IpdataTest {
       .withDefaultCache()
       .key(KEY)
       .get();
-    ipdataService.
-    //ipdataService.bulkIpdata(Arrays.asList("104.238.59.4"));
     System.out.println(ipdataService.bulkIpdata(Arrays.asList("104.238.59.4")));
   }
 
