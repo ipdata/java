@@ -1,7 +1,7 @@
 project {
   modelVersion '4.0.0'
   groupId 'io.ipdata.client'
-  artifactId 'ipdata-client'
+  artifactId 'ipdata-java-client'
   version '0.1.0-SNAPSHOT'
   properties {
     'project.build.sourceEncoding' 'UTF-8'
