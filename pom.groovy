@@ -20,4 +20,22 @@ project {
     dependency('org.hamcrest:hamcrest:2.2:test')
     dependency('junit:junit:4.13')
   }
+  build{
+    plugins {
+      plugin('org.apache.maven.plugins:maven-resources-plugin:2.6'){
+        configuration{
+          encoding '${project.build.sourceEncoding}'
+        }
+      }
+    }
+    resources{
+      resource{
+        directory 'src/main/resources'
+        filtering true
+        includes{
+          'VERSION'
+        }
+      }
+    }
+  }
 }

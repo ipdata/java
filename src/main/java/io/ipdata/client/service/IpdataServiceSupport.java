@@ -39,6 +39,8 @@ class IpdataServiceSupport implements IpdataService {
     if (fields.length == 0) {
       return null;
     }
+    //sorting here to improve the likelihood of a cache hit, otherwise a permutation of the same
+    //array would result into a different cache key, and thus a cache miss
     Arrays.sort(fields, COMPARATOR);
     return api.getFields(ip, Joiner.on(SEPARATOR).join(Arrays.asList(fields)));
   }
