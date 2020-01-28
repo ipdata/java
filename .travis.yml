@@ -12,19 +12,15 @@ jobs:
   include:
     - stage: test
       script:
-        - mvn clean test post-integration-test
-    - stage: quality-report
-      script:
-        - mvn sonar:sonar -Dsonar.projectKey=yassine_ipdata-java-client
-    - stage: package
+        - mvn clean test post-integration-test sonar:sonar
+    - stage: release
       script:
         - openssl enc -aes-256-cbc -d -in ./.travis/ipdata-java.crypted.gpg.key -out ./.travis/ipdata.out.key -base64 -K $GPG_AES_KEY -iv $GPG_AES_KEY_IV -S $GPG_AES_KEY_SALT
         - echo $GPG_PASSPHRASE | gpg --import --batch --yes --passphrase-fd 0 ./.travis/ipdata.out.key
         - mvn package verify -Prelease -DskipTests=true -Dgpg.keyname=$GPG_KEY_NAME -Dgpg.passphrase=$GPG_PASSPHRASE
 stages:
   - test
-  - quality-report
-  - name: package
+  - name: release
     if: branch = releases
 notifications:
   email: false

@@ -110,15 +110,15 @@ public class IpdataFunctionalTest {
   @Test
   @SneakyThrows
   public void testFieldSelection() {
-    IpdataModel ipdataModel = ipdataService.getFields("8.8.8.8", IpdataField.ASN, IpdataField.CURRENCY);
+    IpdataModel ipdataModel = ipdataService.getFields("41.128.21.123", IpdataField.ASN, IpdataField.CURRENCY);
     String serialized = MAPPER.writeValueAsString(ipdataModel);
-    String expected = TestUtils.get(HTTP_CLIENT, "/8.8.8.8", ImmutableMap.of("fields", "asn,currency"));
+    String expected = TestUtils.get(HTTP_CLIENT, "/41.128.21.123", ImmutableMap.of("fields", "asn,currency"));
     expected = MAPPER.writeValueAsString(MAPPER.readValue(expected, IpdataModel.class));
     assertEquals(serialized, expected, false);
     Assert.assertNull(ipdataModel.threat());
     if (ipdataService == CACHING_IPDATA_SERVICE) {
       //value will be returned from cache now
-      ipdataModel = ipdataService.getFields("8.8.8.8", IpdataField.ASN, IpdataField.CURRENCY);
+      ipdataModel = ipdataService.getFields("41.128.21.123", IpdataField.ASN, IpdataField.CURRENCY, IpdataField.CARRIER);
       serialized = MAPPER.writeValueAsString(ipdataModel);
       assertEquals(serialized, expected, false);
     }

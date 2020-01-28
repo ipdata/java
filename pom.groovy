@@ -28,7 +28,7 @@ project {
     'version.build.jacoco' '0.8.4'
     'version.build.surefire' '3.0.0-M3'
     'sonar.organization' 'yassine-github'
-    'sonar.coverage.jacoco.xmlReportPaths' 'target/site/code-coverage/jacoco.xml'
+    'sonar.coverage.jacoco.xmlReportPaths' '${project.build.directory}/site/code-coverage/jacoco.xml'
     'sonar.links.homepage' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.issue' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.scm' 'https://github.com/yassine/ipdata-java-client'
