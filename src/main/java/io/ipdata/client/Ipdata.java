@@ -52,6 +52,15 @@ public final class Ipdata {
     private Client feignClient;
 
     /**
+     * Overrides current cache config with null (no caching).
+     * @return this
+     */
+    public Builder noCache(){
+      this .cacheConfig = null;
+      return this;
+    }
+
+    /**
      * Configures a cache with default configuration parameters.
      * Note: Overrides any previously configured cache.
      *
