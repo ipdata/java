@@ -5,8 +5,9 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import java.io.InputStreamReader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Slf4j
 class ApiKeyRequestInterceptor implements RequestInterceptor {
 
   private static final String API_KEY_PARAM = "api-key";
@@ -21,7 +22,7 @@ class ApiKeyRequestInterceptor implements RequestInterceptor {
                           .getResourceAsStream("/VERSION"))).replaceAll("\\n","");
       version  = String.format("io.ipdata.client.java.%s", version);
     }catch (Exception e){
-      e.printStackTrace();
+      log.error(e.getMessage(), e);
       version  = "io.ipdata.client.java.UNKNOWN";
     }
     API_CLIENT_VALUE = version;

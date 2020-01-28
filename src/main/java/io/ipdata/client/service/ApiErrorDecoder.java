@@ -10,9 +10,10 @@ import io.ipdata.client.model.Error;
 import java.io.IOException;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Slf4j
 public class ApiErrorDecoder implements ErrorDecoder {
   private static final int RATE_LIMIT_STATUS = 403;
   private final ObjectMapper mapper;
@@ -35,7 +36,7 @@ public class ApiErrorDecoder implements ErrorDecoder {
         return new RemoteIpdataException(error.getMessage(), response.status());
       }
     } catch (IOException ioException) {
-      ioException.printStackTrace();
+      log.error(ioException.getMessage(), ioException);
       return new RemoteIpdataException(message, response.status());
     }
   }
