@@ -15,7 +15,7 @@ project {
     'sonar.links.issue' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.scm' 'https://github.com/yassine/ipdata-java-client'
     'sonar.projectKey' 'yassine_ipdata-java-client'
-    'sonar.projectName' 'spring-boot-sample'
+    'sonar.projectName' 'ipdata-java-client'
     'sonar.projectVersion' '${project.version}'
     'sonar.host.url' 'https://sonarcloud.io'
     'sonar.tests' '${project.basedir}/src/test'
