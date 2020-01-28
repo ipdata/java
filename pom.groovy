@@ -18,6 +18,9 @@ project {
     'sonar.projectName' 'spring-boot-sample'
     'sonar.projectVersion' '${project.version}'
     'sonar.host.url' 'https://sonarcloud.io'
+    'sonar.tests' '${project.basedir}/src/test'
+    'sonar.java.coveragePlugin' 'jacoco'
+    'sonar.dynamicAnalysis' 'reuseReports'
   }
   dependencies {
     dependency('io.github.openfeign:feign-core:${version.client.feign}')
