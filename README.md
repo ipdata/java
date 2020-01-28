@@ -1,9 +1,9 @@
 # ipdata-java-client
 ![Build Status](https://www.travis-ci.org/yassine/ipdata-java-client.svg?branch=master)
-[![Coverage Status](https://sonarcloud.io/api/project_badges/measure?metric=coverage&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/com.github.yassine:ipdata-java-client)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?metric=alert_status&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/com.github.yassine:ipdata-java-client)
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?metric=sqale_rating&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/com.github.yassine:ipdata-java-client)
-[![Reliability](https://sonarcloud.io/api/project_badges/measure?metric=reliability_rating&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/com.github.yassine:ipdata-java-client)
+[![Coverage Status](https://sonarcloud.io/api/project_badges/measure?metric=coverage&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?metric=alert_status&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?metric=sqale_rating&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?metric=reliability_rating&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
 
 
 An <i>ipdata.co</i> java client.
