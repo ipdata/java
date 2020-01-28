@@ -22,6 +22,7 @@ import io.ipdata.client.service.IpdataService;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import lombok.SneakyThrows;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -148,7 +149,7 @@ public class IpdataFunctionalTest {
     IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
       .key("THIS_IS_AN_INVALID_KEY")
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setSSLHostnameVerifier(new NoopHostnameVerifier())
+        .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())).get();
     serviceWithInvalidKey.ipdata("8.8.8.8");
   }
