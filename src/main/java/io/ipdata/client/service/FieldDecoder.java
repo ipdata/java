@@ -2,9 +2,7 @@ package io.ipdata.client.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
-import feign.FeignException;
 import feign.Response;
-import feign.codec.DecodeException;
 import feign.codec.Decoder;
 import java.io.IOException;
 import java.lang.reflect.Type;

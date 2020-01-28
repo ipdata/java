@@ -7,34 +7,74 @@ project {
     'project.build.sourceEncoding' 'UTF-8'
     'maven.compiler.source' '6'
     'maven.compiler.target' '6'
+    'version.client.feign' '9.7.0'
+    'version.build.jacoco' '0.8.4'
+    'version.build.surefire' '3.0.0-M3'
   }
-  dependencies{
-    dependency ('io.github.openfeign:feign-core:9.7.0')
-    dependency ('io.github.openfeign:feign-jackson:9.7.0')
-    dependency ('io.github.openfeign:feign-httpclient:9.7.0')
-    dependency ('com.google.guava:guava:20.0')
-    dependency ('org.slf4j:slf4j-api:1.7.30')
-    dependency ('org.slf4j:slf4j-log4j12:1.7.30')
-    dependency ('org.projectlombok:lombok:1.18.10')
+  dependencies {
+    dependency('io.github.openfeign:feign-core:${version.client.feign}')
+    dependency('io.github.openfeign:feign-jackson:${version.client.feign}')
+    dependency('io.github.openfeign:feign-httpclient:${version.client.feign}')
+    dependency('com.google.guava:guava:20.0')
+    dependency('org.slf4j:slf4j-api:1.7.30')
+    dependency('org.slf4j:slf4j-log4j12:1.7.30')
+    dependency('org.projectlombok:lombok:1.18.10')
     /* testing */
     dependency('org.hamcrest:hamcrest:2.2:test')
-    dependency('junit:junit:4.13')
+    dependency('junit:junit:4.13:test')
+    dependency('org.skyscreamer:jsonassert:1.5.0:test')
   }
-  build{
+  build {
     plugins {
-      plugin('org.apache.maven.plugins:maven-resources-plugin:2.6'){
-        configuration{
+      plugin('org.apache.maven.plugins:maven-resources-plugin:2.6') {
+        configuration {
           encoding '${project.build.sourceEncoding}'
         }
       }
+      plugin {
+        groupId 'org.jacoco'
+        artifactId 'jacoco-maven-plugin'
+        version '${version.build.jacoco}'
+        executions {
+          execution {
+            id 'prepare-agent'
+            phase 'test-compile'
+            goals 'prepare-agent'
+            configuration {
+              propertyName 'surefireArgLine'
+              destFile '${project.build.directory}/coverage-reports/jacoco-ut.exec'
+            }
+          }
+          execution {
+            id 'post-test-reports'
+            phase 'post-integration-test'
+            goals 'report'
+            configuration {
+              dataFile '${project.build.directory}/coverage-reports/jacoco-ut.exec'
+              outputDirectory '${project.reporting.outputDirectory}/code-coverage'
+            }
+          }
+        }
+      }
+      plugin {
+        artifactId 'maven-surefire-plugin'
+        version '${version.build.surefire}'
+        configuration {
+          useFile 'false'
+          includes {}
+          additionalClasspathElements {
+            additionalClasspathElement '${project.basedir}/src/test/resources'
+            additionalClasspathElement '${project.build.testOutputDirectory}'
+          }
+          argLine '${surefireArgLine}'
+        }
+      }
     }
-    resources{
-      resource{
+    resources {
+      resource {
         directory 'src/main/resources'
         filtering true
-        includes{
-          'VERSION'
-        }
+        includes('VERSION')
       }
     }
   }

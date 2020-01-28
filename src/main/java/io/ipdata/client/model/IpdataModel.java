@@ -9,11 +9,13 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Setter(AccessLevel.PACKAGE)
-@ToString @Getter @Accessors(fluent = true)
+@ToString
+@Getter
+@Accessors(fluent = true)
 public class IpdataModel {
   private String ip;
   @JsonProperty("is_eu")
-  private boolean isEu;
+  private boolean eu;
   private String city;
   private String organization;
   private String region;
@@ -36,4 +38,8 @@ public class IpdataModel {
   private Threat threat;
   //meta
   private int count;
+
+  public boolean isEu() {
+    return eu;
+  }
 }

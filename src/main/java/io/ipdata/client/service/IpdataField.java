@@ -50,7 +50,7 @@ public class IpdataField<T> {
     @Override
     public int compare(IpdataField o1, IpdataField o2) {
       if (o1 == null && o2 == null) {
-        return Integer.MAX_VALUE;
+        return 0;
       }
       if (o1 == null) {
         return o2.name == null ? 0 : Integer.MIN_VALUE;
