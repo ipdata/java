@@ -15,7 +15,7 @@ jobs:
         - mvn clean test post-integration-test
     - stage: quality-report
       script:
-        - mvn clean sonar:sonar -Dsonar.projectKey=yassine_ipdata-java-client
+        - mvn sonar:sonar -Dsonar.projectKey=yassine_ipdata-java-client
     - stage: package
       script:
         - openssl enc -aes-256-cbc -d -in ./.travis/ipdata-java.crypted.gpg.key -out ./.travis/ipdata.out.key -base64 -K $GPG_AES_KEY -iv $GPG_AES_KEY_IV -S $GPG_AES_KEY_SALT
