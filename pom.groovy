@@ -10,6 +10,14 @@ project {
     'version.client.feign' '9.7.0'
     'version.build.jacoco' '0.8.4'
     'version.build.surefire' '3.0.0-M3'
+    'sonar.jacoco.reportPaths' '${project.build.directory}/coverage-reports/jacoco-ut.exec'
+    'sonar.links.homepage' 'https://github.com/yassine/ipdata-java-client'
+    'sonar.links.issue' 'https://github.com/yassine/ipdata-java-client'
+    'sonar.links.scm' 'https://github.com/yassine/ipdata-java-client'
+    'sonar.projectKey' 'com.github.yassine:ipdata-java-client'
+    'sonar.projectName' 'spring-boot-sample'
+    'sonar.projectVersion' '${project.version}'
+
   }
   dependencies {
     dependency('io.github.openfeign:feign-core:${version.client.feign}')
@@ -68,6 +76,11 @@ project {
           }
           argLine '${surefireArgLine}'
         }
+      }
+      plugin {
+        groupId 'org.codehaus.mojo'
+        artifactId 'sonar-maven-plugin'
+        version '3.6.0.1398'
       }
     }
     resources {
