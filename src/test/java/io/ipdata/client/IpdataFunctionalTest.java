@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import feign.httpclient.ApacheHttpClient;
 import io.ipdata.client.error.IpdataException;
-import io.ipdata.client.error.RateLimitException;
 import io.ipdata.client.model.AsnModel;
 import io.ipdata.client.model.Currency;
 import io.ipdata.client.model.IpdataModel;

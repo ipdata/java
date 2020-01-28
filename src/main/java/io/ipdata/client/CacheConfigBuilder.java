@@ -32,7 +32,7 @@ public class CacheConfigBuilder {
    * The maximum duration before invalidating a cache entry.
    * @param timeout The duration
    * @param unit The duration unit
-   * @return
+   * @return this builder
    */
   public CacheConfigBuilder timeout(int timeout, TimeUnit unit) {
     if (timeout <= 0) {

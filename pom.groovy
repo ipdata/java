@@ -1,8 +1,25 @@
 project {
   modelVersion '4.0.0'
-  groupId 'io.ipdata.client'
+  groupId 'co.ipdata.client'
   artifactId 'ipdata-java-client'
   version '0.1.0-SNAPSHOT'
+  licenses {
+    license {
+      name 'The Apache Licence, Version 2.0'
+      url 'http://www.apache.org/licenses/LICENCE-2.0.txt'
+    }
+  }
+  scm {
+    connection 'git@github.com:yassine/ipdata-java-client.git'
+    developerConnection 'git@github.com:yassine/ipdata-java-client.git'
+    url 'https://github.com/yassine/ipdata-java-client'
+  }
+  developers {
+    developer {
+      name 'ipdata.co'
+      email 'support@ipdata.co'
+    }
+  }
   properties {
     'project.build.sourceEncoding' 'UTF-8'
     'maven.compiler.source' '6'
@@ -19,7 +36,6 @@ project {
     'sonar.projectName' 'ipdata-java-client'
     'sonar.projectVersion' '${project.version}'
     'sonar.host.url' 'https://sonarcloud.io'
-
   }
   dependencies {
     dependency('io.github.openfeign:feign-core:${version.client.feign}')
@@ -34,6 +50,23 @@ project {
     dependency('junit:junit:4.13:test')
     dependency('org.skyscreamer:jsonassert:1.5.0:test')
   }
+  profiles {
+    profile {
+      id 'release'
+      build {
+        plugins {
+          plugin('org.apache.maven.plugins:maven-gpg-plugin:1.6') {
+            executions {
+              execution {
+                phase 'verify'
+                goals 'sign'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   build {
     plugins {
       plugin('org.apache.maven.plugins:maven-resources-plugin:2.6') {
@@ -41,10 +74,7 @@ project {
           encoding '${project.build.sourceEncoding}'
         }
       }
-      plugin {
-        groupId 'org.jacoco'
-        artifactId 'jacoco-maven-plugin'
-        version '${version.build.jacoco}'
+      plugin('org.jacoco:jacoco-maven-plugin:${version.build.jacoco}') {
         executions {
           execution {
             id 'prepare-agent'
@@ -79,10 +109,20 @@ project {
           argLine '${surefireArgLine}'
         }
       }
-      plugin {
-        groupId 'org.codehaus.mojo'
-        artifactId 'sonar-maven-plugin'
-        version '3.6.0.1398'
+      plugin('org.codehaus.mojo:sonar-maven-plugin:3.6.0.1398')
+      plugin('org.apache.maven.plugins:maven-source-plugin:3.2.1') {
+        executions {
+          execution('attach-sources') {
+            goals('jar')
+          }
+        }
+      }
+      plugin('org.apache.maven.plugins:maven-javadoc-plugin:3.1.1') {
+        executions {
+          execution('attach-javadocs') {
+            goals('jar')
+          }
+        }
       }
     }
     resources {
