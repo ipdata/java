@@ -13,10 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import feign.httpclient.ApacheHttpClient;
 import io.ipdata.client.error.RateLimitException;
-import io.ipdata.client.model.Asn;
+import io.ipdata.client.model.AsnModel;
 import io.ipdata.client.model.Currency;
 import io.ipdata.client.model.IpdataModel;
-import io.ipdata.client.model.Threat;
+import io.ipdata.client.model.ThreatModel;
 import io.ipdata.client.service.IpdataField;
 import io.ipdata.client.service.IpdataService;
 import java.net.URL;
@@ -62,10 +62,10 @@ public class IpdataFunctionalTest {
   @Test
   @SneakyThrows
   public void testASN() {
-    Asn asn = ipdataService.asn("8.8.8.8");
+    AsnModel asn = ipdataService.asn("8.8.8.8");
     String serialized = MAPPER.writeValueAsString(asn);
     String expected = TestUtils.get(HTTP_CLIENT, "/8.8.8.8/asn", null);
-    expected = MAPPER.writeValueAsString(MAPPER.readValue(expected, Asn.class));
+    expected = MAPPER.writeValueAsString(MAPPER.readValue(expected, AsnModel.class));
     assertEquals(serialized, expected, false);
     if (ipdataService == CACHING_IPDATA_SERVICE) {
       //value will be returned from cache now
@@ -78,10 +78,10 @@ public class IpdataFunctionalTest {
   @Test
   @SneakyThrows
   public void testThreat() {
-    Threat threat = ipdataService.threat("8.8.8.8");
+    ThreatModel threat = ipdataService.threat("8.8.8.8");
     String serialized = MAPPER.writeValueAsString(threat);
     String expected = TestUtils.get(HTTP_CLIENT, "/8.8.8.8/threat", null);
-    expected = MAPPER.writeValueAsString(MAPPER.readValue(expected, Threat.class));
+    expected = MAPPER.writeValueAsString(MAPPER.readValue(expected, ThreatModel.class));
     assertEquals(serialized, expected, false);
     if (ipdataService == CACHING_IPDATA_SERVICE) {
       //value will be returned from cache now

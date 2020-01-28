@@ -5,7 +5,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @ToString @Getter @Accessors(fluent = true)
-public class Asn {
+public class AsnModel {
   private String asn;
   private String name;
   private String domain;

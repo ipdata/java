@@ -30,12 +30,12 @@ public class IpdataModel {
   private String flag;
   private String emojiFlag;
   private String emojiUnicode;
-  private Asn asn;
+  private AsnModel asn;
   private Carrier carrier;
   private List<Language> languages;
   private Currency currency;
   private TimeZone timeZone;
-  private Threat threat;
+  private ThreatModel threat;
   //meta
   private int count;
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter @ToString
-public class Threat {
+public class ThreatModel {
   @JsonProperty("is_tor")
   private boolean tor;
   @JsonProperty("is_proxy")

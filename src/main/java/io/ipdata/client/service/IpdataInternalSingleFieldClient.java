@@ -3,9 +3,9 @@ package io.ipdata.client.service;
 import feign.Param;
 import feign.RequestLine;
 import io.ipdata.client.error.IpdataException;
-import io.ipdata.client.model.Asn;
+import io.ipdata.client.model.AsnModel;
 import io.ipdata.client.model.Currency;
-import io.ipdata.client.model.Threat;
+import io.ipdata.client.model.ThreatModel;
 import io.ipdata.client.model.TimeZone;
 
 @SuppressWarnings("RedundantThrows")
@@ -55,7 +55,7 @@ interface IpdataInternalSingleFieldClient {
 
   @Cacheable
   @RequestLine("GET /{ip}/asn")
-  Asn asn(@Param("ip") String ip) throws IpdataException;
+  AsnModel asn(@Param("ip") String ip) throws IpdataException;
 
   @Cacheable
   @RequestLine("GET /{ip}/time_zone")
@@ -67,6 +67,6 @@ interface IpdataInternalSingleFieldClient {
 
   @Cacheable
   @RequestLine("GET /{ip}/threat")
-  Threat threat(@Param("ip") String ip) throws IpdataException;
+  ThreatModel threat(@Param("ip") String ip) throws IpdataException;
 
 }

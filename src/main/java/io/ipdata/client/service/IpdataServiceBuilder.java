@@ -14,10 +14,10 @@ import feign.Feign;
 import feign.httpclient.ApacheHttpClient;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
-import io.ipdata.client.model.Asn;
+import io.ipdata.client.model.AsnModel;
 import io.ipdata.client.model.Currency;
 import io.ipdata.client.model.IpdataModel;
-import io.ipdata.client.model.Threat;
+import io.ipdata.client.model.ThreatModel;
 import io.ipdata.client.model.TimeZone;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
@@ -91,9 +91,9 @@ public class IpdataServiceBuilder {
           CacheBuilder.newBuilder()
             .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
             .maximumSize(cacheConfig.maxSize())
-            .build(new CacheLoader<String, Asn>() {
+            .build(new CacheLoader<String, AsnModel>() {
               @Override
-              public Asn load(String key) throws Exception {
+              public AsnModel load(String key) throws Exception {
                 return singleFieldClient.asn(key);
               }
             })
@@ -124,9 +124,9 @@ public class IpdataServiceBuilder {
           CacheBuilder.newBuilder()
             .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
             .maximumSize(cacheConfig.maxSize())
-            .build(new CacheLoader<String, Threat>() {
+            .build(new CacheLoader<String, ThreatModel>() {
               @Override
-              public Threat load(String key) throws Exception {
+              public ThreatModel load(String key) throws Exception {
                 return singleFieldClient.threat(key);
               }
             })

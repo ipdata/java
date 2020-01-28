@@ -1,6 +1,6 @@
 package io.ipdata.client.service;
 
-import io.ipdata.client.model.Asn;
+import io.ipdata.client.model.AsnModel;
 import io.ipdata.client.model.Carrier;
 import io.ipdata.client.model.Currency;
 import io.ipdata.client.model.Language;
@@ -25,7 +25,7 @@ public class IpdataField<T> {
   public static final IpdataField<String> CONTINENT_CODE = new IpdataField<String>("continent_code", String.class);
   public static final IpdataField<Double> LATITUDE = new IpdataField<Double>("latitude", Double.class);
   public static final IpdataField<Double> LONGITUDE = new IpdataField<Double>("longitude", Double.class);
-  public static final IpdataField<Asn> ASN = new IpdataField<Asn>("asn", Asn.class);
+  public static final IpdataField<AsnModel> ASN = new IpdataField<AsnModel>("asn", AsnModel.class);
   public static final IpdataField<String> ORGANISATION = new IpdataField<String>("organisation", String.class);
   public static final IpdataField<String> POSTAL = new IpdataField<String>("postal", String.class);
   public static final IpdataField<String> CALLING_CODE = new IpdataField<String>("calling_code", String.class);
@@ -39,7 +39,7 @@ public class IpdataField<T> {
   public static final IpdataField<TimeZone> THREAT = new IpdataField<TimeZone>("threat", TimeZone.class);
   public static final IpdataField<Integer> COUNT = new IpdataField<Integer>("count", Integer.class);
   private final String name;
-  private final Class<?> type;
+  private final Class<T> type;
 
   @Override
   public String toString() {
