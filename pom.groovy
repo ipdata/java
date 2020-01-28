@@ -14,10 +14,10 @@ project {
     'sonar.links.homepage' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.issue' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.scm' 'https://github.com/yassine/ipdata-java-client'
-    'sonar.projectKey' 'com.github.yassine:ipdata-java-client'
+    'sonar.projectKey' 'yassine_ipdata-java-client'
     'sonar.projectName' 'spring-boot-sample'
     'sonar.projectVersion' '${project.version}'
-
+    'sonar.host.url' 'https://sonarcloud.io'
   }
   dependencies {
     dependency('io.github.openfeign:feign-core:${version.client.feign}')
