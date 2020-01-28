@@ -1,0 +1,18 @@
+sudo: required
+dist: trusty
+language: java
+jdk:
+  - openjdk8
+script:
+  - mvn clean test post-integration-test
+after_success:
+  - mvn sonar:sonar
+addons:
+  sonarcloud:
+    organization: yassine-github
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+notifications:
+  email: false
