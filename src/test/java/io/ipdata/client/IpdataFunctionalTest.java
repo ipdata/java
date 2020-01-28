@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import feign.httpclient.ApacheHttpClient;
+import io.ipdata.client.error.IpdataException;
 import io.ipdata.client.error.RateLimitException;
 import io.ipdata.client.model.AsnModel;
 import io.ipdata.client.model.Currency;
@@ -143,15 +144,68 @@ public class IpdataFunctionalTest {
   }
 
   @SneakyThrows
-  @Test(expected = RateLimitException.class)
+  @Test(expected = IpdataException.class)
   public void testError() {
     URL url = new URL("https://api.ipdata.co");
     IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
       .key("THIS_IS_AN_INVALID_KEY")
+      .withDefaultCache()
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
         .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())).get();
     serviceWithInvalidKey.ipdata("8.8.8.8");
+  }
+
+  @SneakyThrows
+  @Test(expected = IpdataException.class)
+  public void testAsnError() {
+    URL url = new URL("https://api.ipdata.co");
+    IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
+      .key("THIS_IS_AN_INVALID_KEY")
+      .withDefaultCache()
+      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
+        .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
+        .build())).get();
+    serviceWithInvalidKey.asn("8.8.8.8");
+  }
+
+  @SneakyThrows
+  @Test(expected = IpdataException.class)
+  public void testThreatError() {
+    URL url = new URL("https://api.ipdata.co");
+    IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
+      .key("THIS_IS_AN_INVALID_KEY")
+      .withDefaultCache()
+      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
+        .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
+        .build())).get();
+    serviceWithInvalidKey.threat("8.8.8.8");
+  }
+
+  @SneakyThrows
+  @Test(expected = IpdataException.class)
+  public void testTimeZoneError() {
+    URL url = new URL("https://api.ipdata.co");
+    IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
+      .key("THIS_IS_AN_INVALID_KEY")
+      .withDefaultCache()
+      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
+        .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
+        .build())).get();
+    serviceWithInvalidKey.timeZone("8.8.8.8");
+  }
+
+  @SneakyThrows
+  @Test(expected = IpdataException.class)
+  public void testCurrencyError() {
+    URL url = new URL("https://api.ipdata.co");
+    IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
+      .key("THIS_IS_AN_INVALID_KEY")
+      .withDefaultCache()
+      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
+        .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
+        .build())).get();
+    serviceWithInvalidKey.currency("8.8.8.8");
   }
 
   @Parameters

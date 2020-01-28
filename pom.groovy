@@ -10,7 +10,8 @@ project {
     'version.client.feign' '9.7.0'
     'version.build.jacoco' '0.8.4'
     'version.build.surefire' '3.0.0-M3'
-    'sonar.jacoco.reportPaths' '${project.build.directory}/coverage-reports/jacoco-ut.exec'
+    'sonar.organization' 'yassine-github'
+    'sonar.coverage.jacoco.xmlReportPaths' 'target/site/code-coverage/jacoco.xml'
     'sonar.links.homepage' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.issue' 'https://github.com/yassine/ipdata-java-client'
     'sonar.links.scm' 'https://github.com/yassine/ipdata-java-client'
@@ -18,9 +19,7 @@ project {
     'sonar.projectName' 'ipdata-java-client'
     'sonar.projectVersion' '${project.version}'
     'sonar.host.url' 'https://sonarcloud.io'
-    'sonar.tests' '${project.basedir}/src/test'
-    'sonar.java.coveragePlugin' 'jacoco'
-    'sonar.dynamicAnalysis' 'reuseReports'
+
   }
   dependencies {
     dependency('io.github.openfeign:feign-core:${version.client.feign}')
