@@ -225,6 +225,7 @@ public class IpdataFunctionalTest {
     HTTP_CLIENT = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier())
       .build();
     IPDATA_SERVICE = Ipdata.builder().url(url).key(KEY)
+      .noCache()
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
         .setSSLHostnameVerifier(new NoopHostnameVerifier())
         .build())).get();
