@@ -53,6 +53,9 @@ project {
   profiles {
     profile {
       id 'release'
+      properties {
+        'gpg.executable' 'gpg2'
+      }
       build {
         plugins {
           plugin('org.apache.maven.plugins:maven-gpg-plugin:1.6') {

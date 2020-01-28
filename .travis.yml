@@ -3,12 +3,28 @@ dist: trusty
 language: java
 jdk:
   - openjdk8
-script:
-  - mvn clean test post-integration-test sonar:sonar -Dsonar.projectKey=yassine_ipdata-java-client
 addons:
   sonarcloud:
     organization: yassine-github
     token:
       secure: PYT5/IbiqFd877vdi+CYTx7srXr5ACvAgBSL4rxPqwVSQUdGIZxVTj8JcZp7Cl2WiDj9zDlTHSDaJDt5ZpXnmN5quJBizuCZDVArm3LoRADjxhOd9N8rQEYEE1TZOHlu1+g1i/abOL+av9Spn7lWk1LvuH5BW3b0GiAdqJFevfnJsUYDh4iYHiMYjTIP5dO/cZUnQzgFgZS6YkMA28cgQIy/F03z6tO9oM6kcJ/DGBnqvdGAT2ZxtWhFaaNwJazlxSePCwnOok+v3vgACzGospTJLQ4AdGklYIK+ljGpz7AbiRs7yhvzsib6i5Wr0IEmZmLiyIgjExPdnV+rXAndgig/0bnhv1YzyEf/hCzMczpHvNa0HDAGCxkTIsw76XlumwPMGURdlypWEoWrz/9cwiPMnQ0XcAOTN56msA5nBbNwnJ9KDKIVWKWg447OhbImlTr+qxHI/L+8e1dFxyA1iBg7/wtU/27V2QRABvhdlVGNn1khdkIKhsueYHbBjloUTILHBFKTtJdZdD2z/Vf9cu51EQDwv5IPfkkz/UER8pw4AVKgFi6v57M3unqE5C6g8dZr5CELAqy3tGjf6v9HaTF3AdGEkyIJuxiiO8LM20MJm+IreR/pIv8SVeT7f747hbPCQ+mMe5rSE4KVtSI88OeUcI193pdd5PBg0jU262I=
+jobs:
+  include:
+    - stage: test
+      script:
+        - mvn clean test post-integration-test
+    - stage: quality-report
+      script:
+        - mvn clean sonar:sonar -Dsonar.projectKey=yassine_ipdata-java-client
+    - stage: package
+      script:
+        - openssl enc -aes-256-cbc -d -in ./.travis/ipdata-java.crypted.gpg.key -out ./.travis/ipdata.out.key -base64 -K $GPG_AES_KEY -iv $GPG_AES_KEY_IV -S $GPG_AES_KEY_SALT
+        - echo $GPG_PASSPHRASE | gpg --import --batch --yes --passphrase-fd 0 ./.travis/ipdata.out.key
+        - mvn package verify -Prelease -DskipTests=true -Dgpg.keyname=$GPG_KEY_NAME -Dgpg.passphrase=$GPG_PASSPHRASE
+stages:
+  - test
+  - quality-report
+  - name: package
+    if: branch = releases
 notifications:
   email: false

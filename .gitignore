@@ -16,3 +16,4 @@ buildNumber.properties
 out
 gen
 NOTES
+.travis/ipdata.out.key
