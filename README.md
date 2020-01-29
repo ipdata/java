@@ -132,7 +132,7 @@ Output:
 
 #### Single Field Selection
 If you're interested in only one field from the model capturing an IP address information, The service interface
-exposes some a method on each available field:
+exposes a method on each available field:
 
 ```java
 boolean isEu = ipdataService.isEu("1.1.1.1");
@@ -158,7 +158,7 @@ IpdataModel model = ipdataService.getFields("1.1.1.1", IpdataField.ASN, IpdataFi
 You can as well get multiple responses at once by using the ``bulk`` api:
 
 ```java
-List<IpdataModel> models = ipdataService.bulkIpdata(Arrays.asList("1.1.1.1", "8.8.8.8"));
+List<IpdataModel> models = ipdataService.bulk(Arrays.asList("1.1.1.1", "8.8.8.8"));
 ```
 
 
