@@ -65,10 +65,69 @@ The client is fully compliant with the API. The data model of the api is availab
 Interaction with the API is captured by the Service Interface ``io.ipdata.client.service.IpdataService``:
 
 #### Basic Usage
-To get all available information about a given IP address, you can use the ``get`` method of the service Interface:
+To get all available information about a given IP address, you can use the ``ipdata`` method of the service Interface:
 ```java
 IpdataModel model = ipdataService.ipdata("1.1.1.1");
 System.out.println(jsonSerialize(model));
+```
+
+Output:
+```json
+{
+    "ip": "1.1.1.1",
+    "is_eu": false,
+    "city": null,
+    "region": null,
+    "region_code": null,
+    "country_name": "Australia",
+    "country_code": "AU",
+    "continent_name": "Oceania",
+    "continent_code": "OC",
+    "latitude": -33.494,
+    "longitude": 143.2104,
+    "postal": null,
+    "calling_code": "61",
+    "flag": "https://ipdata.co/flags/au.png",
+    "emoji_flag": "\ud83c\udde6\ud83c\uddfa",
+    "emoji_unicode": "U+1F1E6 U+1F1FA",
+    "asn": {
+        "asn": "AS13335",
+        "name": "Cloudflare, Inc.",
+        "domain": "cloudflare.com",
+        "route": "1.1.1.0/24",
+        "type": "hosting"
+    },
+    "languages": [
+        {
+            "name": "English",
+            "native": "English"
+        }
+    ],
+    "currency": {
+        "name": "Australian Dollar",
+        "code": "AUD",
+        "symbol": "AU$",
+        "native": "$",
+        "plural": "Australian dollars"
+    },
+    "time_zone": {
+        "name": "Australia/Sydney",
+        "abbr": "AEDT",
+        "offset": "+1100",
+        "is_dst": true,
+        "current_time": "2020-01-29T20:22:52.283874+11:00"
+    },
+    "threat": {
+        "is_tor": false,
+        "is_proxy": false,
+        "is_anonymous": false,
+        "is_known_attacker": false,
+        "is_known_abuser": false,
+        "is_threat": false,
+        "is_bogon": false
+    },
+    "count": "0"
+}
 ```
 
 #### Single Field Selection
