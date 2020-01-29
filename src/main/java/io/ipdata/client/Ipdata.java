@@ -68,7 +68,7 @@ public final class Ipdata {
      */
     public Builder withDefaultCache() {
       return new CacheConfigBuilder(this)
-        .maxSize(Long.MAX_VALUE)
+        .maxSize(1024)
         .timeout(4, TimeUnit.HOURS)
         .registerCacheConfig();
     }

@@ -13,7 +13,7 @@ interface IpdataInternalClient {
   IpdataModel ipdata(@Param("ip") String ip) throws IpdataException;
 
   @RequestLine("POST /bulk")
-  List<IpdataModel> bulkIpdata(List<String> ips) throws IpdataException;
+  List<IpdataModel> bulk(List<String> ips) throws IpdataException;
 
   @Cacheable
   @RequestLine("GET /{ip}?fields={fields}")

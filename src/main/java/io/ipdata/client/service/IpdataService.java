@@ -9,9 +9,9 @@ public interface IpdataService extends IpdataInternalSingleFieldClient {
 
   IpdataModel ipdata(String ip) throws IpdataException;
 
-  List<IpdataModel> bulkIpdata(List<String> ips) throws IpdataException;
+  List<IpdataModel> bulk(List<String> ips) throws IpdataException;
 
-  IpdataModel[] bulkIpdataAsArray(List<String> ips) throws IpdataException;
+  IpdataModel[] bulkAsArray(List<String> ips) throws IpdataException;
 
   IpdataModel getFields(String ip, IpdataField<?>... fields) throws IpdataException;
 }

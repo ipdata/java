@@ -30,8 +30,8 @@ class IpdataServiceSupport implements IpdataService {
   }
 
   @Override
-  public IpdataModel[] bulkIpdataAsArray(List<String> ips) throws IpdataException {
-    return bulkIpdata(ips).toArray(new IpdataModel[0]);
+  public IpdataModel[] bulkAsArray(List<String> ips) throws IpdataException {
+    return bulk(ips).toArray(new IpdataModel[0]);
   }
 
   @Override

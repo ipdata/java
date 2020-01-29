@@ -27,6 +27,7 @@ project {
     'version.client.feign' '9.7.0'
     'version.build.jacoco' '0.8.4'
     'version.build.surefire' '3.0.0-M3'
+    'version.build.sonar' '3.7.0.1746'
     'sonar.organization' 'yassine-github'
     'sonar.coverage.jacoco.xmlReportPaths' '${project.build.directory}/site/code-coverage/jacoco.xml'
     'sonar.links.homepage' 'https://github.com/yassine/ipdata-java-client'
@@ -112,7 +113,7 @@ project {
           argLine '${surefireArgLine}'
         }
       }
-      plugin('org.codehaus.mojo:sonar-maven-plugin:3.6.0.1398')
+      plugin('org.codehaus.mojo:sonar-maven-plugin:${version.build.sonar}')
       plugin('org.apache.maven.plugins:maven-source-plugin:3.2.1') {
         executions {
           execution('attach-sources') {

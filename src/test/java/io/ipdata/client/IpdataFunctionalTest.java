@@ -135,7 +135,7 @@ public class IpdataFunctionalTest {
   @SneakyThrows
   @Test
   public void testBulkResponse() {
-    List<IpdataModel> ipdataModels = ipdataService.bulkIpdata(Arrays.asList("8.8.8.8", "1.1.1.1"));
+    List<IpdataModel> ipdataModels = ipdataService.bulk(Arrays.asList("8.8.8.8", "1.1.1.1"));
     String serialized = MAPPER.writeValueAsString(ipdataModels);
     String expected = TestUtils.post(HTTP_CLIENT, "/bulk", "[\"8.8.8.8\",\"1.1.1.1\"]", null);
     expected = MAPPER.writeValueAsString(MAPPER.readValue(expected, IpdataModel[].class));
