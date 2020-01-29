@@ -93,8 +93,8 @@ public class CachingInternalClient implements IpdataInternalClient, IpdataIntern
   }
 
   @Override
-  public List<IpdataModel> bulkIpdata(List<String> ips) throws IpdataException {
-    return ipdataInternalClient.bulkIpdata(ips);
+  public List<IpdataModel> bulk(List<String> ips) throws IpdataException {
+    return ipdataInternalClient.bulk(ips);
   }
 
   @Delegate(types = IpdataInternalSingleFieldClient.class, excludes = DelegateExcludes.class)
