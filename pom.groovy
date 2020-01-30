@@ -133,7 +133,7 @@ project {
       resource {
         directory 'src/main/resources'
         filtering true
-        includes('VERSION')
+        includes('io/ipdata/client/VERSION')
       }
     }
   }

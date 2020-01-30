@@ -19,7 +19,7 @@ class ApiKeyRequestInterceptor implements RequestInterceptor {
     String version;
     try {
       version = CharStreams.toString(new InputStreamReader(ApiKeyRequestInterceptor.class
-                          .getResourceAsStream("/VERSION"))).replaceAll("\\n","");
+                          .getResourceAsStream("/io/ipdata/client/VERSION"))).replaceAll("\\n","");
       version  = String.format("io.ipdata.client.java.%s", version);
     }catch (Exception e){
       log.error(e.getMessage(), e);
