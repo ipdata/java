@@ -1,42 +1,33 @@
 package io.ipdata.client.service;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.LoadingCache;
 import io.ipdata.client.error.IpdataException;
-import io.ipdata.client.model.AsnModel;
-import io.ipdata.client.model.Currency;
-import io.ipdata.client.model.IpdataModel;
-import io.ipdata.client.model.ThreatModel;
-import io.ipdata.client.model.TimeZone;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import io.ipdata.client.model.*;
 import lombok.Builder;
 import lombok.experimental.Delegate;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
 @Builder
-@VisibleForTesting
-
-public class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingleFieldClient {
+class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingleFieldClient {
 
   @Builder.Default
-  @SuppressWarnings("UnusedAssignment") //required by lombok builder
-  private int expiry = 4;
+  private final int expiry = 4;
   @Builder.Default
-  @SuppressWarnings("UnusedAssignment") //required by lombok builder
-  private TimeUnit unit = TimeUnit.HOURS;
+  private final TimeUnit unit = TimeUnit.HOURS;
   @Builder.Default
-  @SuppressWarnings("UnusedAssignment") //required by lombok builder
-  private Long maxSize = Long.MAX_VALUE;
-  private IpdataInternalClient ipdataInternalClient;
-  private IpdataInternalSingleFieldClient ipdataInternalSingleFieldClient;
+  private final Long maxSize = Long.MAX_VALUE;
+  private final IpdataInternalClient ipdataInternalClient;
+  private final IpdataInternalSingleFieldClient ipdataInternalSingleFieldClient;
 
-  private LoadingCache<String, IpdataModel> ipdataCache;
-  private LoadingCache<HashPair<String, String>, IpdataModel> fieldsCache;
-  private LoadingCache<String, AsnModel> asnCache;
-  private LoadingCache<String, TimeZone> tzCache;
-  private LoadingCache<String, Currency> currencyCache;
-  private LoadingCache<String, ThreatModel> threatCache;
+  private final LoadingCache<String, IpdataModel> ipdataCache;
+  private final LoadingCache<HashPair<String, String>, IpdataModel> fieldsCache;
+  private final LoadingCache<String, AsnModel> asnCache;
+  private final LoadingCache<String, TimeZone> tzCache;
+  private final LoadingCache<String, Currency> currencyCache;
+  private final LoadingCache<String, ThreatModel> threatCache;
 
   @Override
   public IpdataModel getFields(String ip, String fields) throws IpdataException {

@@ -4,6 +4,7 @@ import feign.Param;
 import feign.RequestLine;
 import io.ipdata.client.error.IpdataException;
 import io.ipdata.client.model.IpdataModel;
+
 import java.util.List;
 
 @SuppressWarnings("RedundantThrows")

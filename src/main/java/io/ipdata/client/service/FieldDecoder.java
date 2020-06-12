@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
 import feign.Response;
 import feign.codec.Decoder;
+import lombok.RequiredArgsConstructor;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
-import lombok.RequiredArgsConstructor;
 
 /**
  * The API returns usable but invalid(/unquoted) strings for String fields
