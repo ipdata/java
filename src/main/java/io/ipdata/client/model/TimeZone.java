@@ -1,5 +1,6 @@
 package io.ipdata.client.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -10,6 +11,7 @@ public class TimeZone {
   private String name;
   private String abbr;
   private String offset;
-  private String isDst;
-  private String currencyTime;
+  @JsonProperty("is_dst")
+  private boolean dst;
+  private String currentTime;
 }

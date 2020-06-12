@@ -7,13 +7,15 @@ import feign.codec.ErrorDecoder;
 import io.ipdata.client.error.RateLimitException;
 import io.ipdata.client.error.RemoteIpdataException;
 import io.ipdata.client.model.Error;
-import java.io.IOException;
-import java.net.URL;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
-@RequiredArgsConstructor @Slf4j
+import java.io.IOException;
+import java.net.URL;
+
+@RequiredArgsConstructor
+@Slf4j
 public class ApiErrorDecoder implements ErrorDecoder {
   private static final int RATE_LIMIT_STATUS = 403;
   private final ObjectMapper mapper;

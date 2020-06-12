@@ -10,5 +10,5 @@ public class Language {
   private String name;
   @JsonProperty("native")
   private String nativeName;
-  private boolean rtl;
+  private int rtl;
 }

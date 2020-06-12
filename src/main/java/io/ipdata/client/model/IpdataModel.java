@@ -1,12 +1,13 @@
 package io.ipdata.client.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 @Setter(AccessLevel.PACKAGE)
 @ToString
@@ -17,11 +18,13 @@ public class IpdataModel {
   @JsonProperty("is_eu")
   private boolean eu;
   private String city;
-  private String organization;
+  private String organisation;
+
   private String region;
   private String regionCode;
   private String countryName;
   private String countryCode;
+  private String continentName;
   private String continentCode;
   private double latitude;
   private double longitude;
@@ -37,7 +40,14 @@ public class IpdataModel {
   private TimeZone timeZone;
   private ThreatModel threat;
   //meta
-  private int count;
+  private String count;
+
+  /**
+   * Rely on organisation field instead.
+   * @deprecated Use organisation instead
+   */
+  @Deprecated
+  private String organization;
 
   public boolean isEu() {
     return eu;

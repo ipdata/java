@@ -1,10 +1,6 @@
 package io.ipdata.client.service;
 
-import io.ipdata.client.model.AsnModel;
-import io.ipdata.client.model.Carrier;
-import io.ipdata.client.model.Currency;
-import io.ipdata.client.model.Language;
-import io.ipdata.client.model.TimeZone;
+import io.ipdata.client.model.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

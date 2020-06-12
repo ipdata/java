@@ -3,12 +3,13 @@ package io.ipdata.client.service;
 import com.google.common.base.Joiner;
 import io.ipdata.client.error.IpdataException;
 import io.ipdata.client.model.IpdataModel;
-import java.util.Arrays;
-import java.util.List;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Builder

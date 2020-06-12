@@ -1,7 +1,5 @@
 package io.ipdata.client.service;
 
-import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -14,15 +12,14 @@ import feign.Feign;
 import feign.httpclient.ApacheHttpClient;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
-import io.ipdata.client.model.AsnModel;
-import io.ipdata.client.model.Currency;
-import io.ipdata.client.model.IpdataModel;
-import io.ipdata.client.model.ThreatModel;
-import io.ipdata.client.model.TimeZone;
-import java.net.URL;
+import io.ipdata.client.model.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+
+import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
 
 @RequiredArgsConstructor(staticName = "of")
 public class IpdataServiceBuilder {

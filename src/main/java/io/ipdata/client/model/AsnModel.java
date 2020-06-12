@@ -10,5 +10,13 @@ public class AsnModel {
   private String name;
   private String domain;
   private String route;
+  private String type;
+
+  /**
+   * Deprecated
+   *
+   * @deprecated : See: https://github.com/ipdata/java/issues/2
+   */
+  @Deprecated
   private String isp;
 }

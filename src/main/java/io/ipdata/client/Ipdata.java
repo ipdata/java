@@ -14,9 +14,9 @@ import lombok.experimental.UtilityClass;
 import org.slf4j.Logger;
 
 @UtilityClass
-public final class Ipdata {
+public class Ipdata {
 
-  public static Ipdata.Builder builder() {
+  public Ipdata.Builder builder() {
     return new Builder();
   }
 
@@ -53,10 +53,11 @@ public final class Ipdata {
 
     /**
      * Overrides current cache config with null (no caching).
+     *
      * @return this
      */
-    public Builder noCache(){
-      this .cacheConfig = null;
+    public Builder noCache() {
+      this.cacheConfig = null;
       return this;
     }
 

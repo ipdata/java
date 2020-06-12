@@ -1,10 +1,11 @@
 package io.ipdata.client.service;
 
-import java.util.concurrent.TimeUnit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Builder
