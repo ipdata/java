@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(Parameterized.class)
@@ -21,18 +20,19 @@ public class ThreatTest {
   private static final TestContext TEST_CONTEXT = new TestContext("https://api.ipdata.co");
 
   @Parameterized.Parameter
-  public IpdataService ipdataService;
+  public TestFixture fixture;
 
   @Test
   @SneakyThrows
   public void testThreat() {
-    ThreatModel threat = ipdataService.threat("8.8.8.8");
+    IpdataService ipdataService = fixture.service();
+    ThreatModel threat = ipdataService.threat(fixture.target());
     String actual = TEST_CONTEXT.mapper().writeValueAsString(threat);
-    String expected = TEST_CONTEXT.get("/8.8.8.8/threat", null);
+    String expected = TEST_CONTEXT.get("/"+fixture.target()+"/threat", null);
     TEST_CONTEXT.assertEqualJson(actual, expected);
     if (ipdataService == TEST_CONTEXT.cachingIpdataService()) {
       //value will be returned from cache now
-      threat = ipdataService.threat("8.8.8.8");
+      threat = ipdataService.threat(fixture.target());
       actual = TEST_CONTEXT.mapper().writeValueAsString(threat);
       TEST_CONTEXT.assertEqualJson(actual, expected);
     }
@@ -48,12 +48,12 @@ public class ThreatTest {
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
         .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())).get();
-    serviceWithInvalidKey.threat("8.8.8.8");
+    serviceWithInvalidKey.threat(fixture.target());
   }
 
   @Parameterized.Parameters
-  public static Iterable<IpdataService> data() {
-    return Arrays.asList(TEST_CONTEXT.ipdataService(), TEST_CONTEXT.cachingIpdataService());
+  public static Iterable<TestFixture> data() {
+    return TEST_CONTEXT.fixtures();
   }
 
 }

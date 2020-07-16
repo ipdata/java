@@ -5,8 +5,6 @@ import io.ipdata.client.error.IpdataException;
 import io.ipdata.client.model.IpdataModel;
 import io.ipdata.client.service.IpdataService;
 import lombok.SneakyThrows;
-import net.javacrumbs.jsonunit.JsonAssert;
-import net.javacrumbs.jsonunit.core.Option;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Assert;
@@ -15,10 +13,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class FullModelTest {
@@ -26,19 +22,19 @@ public class FullModelTest {
   private static final TestContext TEST_CONTEXT = new TestContext("https://api.ipdata.co");
 
   @Parameterized.Parameter
-  public IpdataService ipdataService;
+  public TestFixture fixture;
 
   @Test
   @SneakyThrows
   public void testFullResponse() {
-    JsonAssert.setOptions(Option.TREATING_NULL_AS_ABSENT, Option.IGNORING_EXTRA_FIELDS);
-    IpdataModel ipdataModel = ipdataService.ipdata("8.8.8.8");
+    IpdataService ipdataService = fixture.service();
+    IpdataModel ipdataModel = ipdataService.ipdata(fixture.target());
     String actual = TEST_CONTEXT.mapper().writeValueAsString(ipdataModel);
-    String expected = TEST_CONTEXT.get("/8.8.8.8", null);
+    String expected = TEST_CONTEXT.get("/"+fixture.target(), null);
     TEST_CONTEXT.assertEqualJson(actual, expected, TEST_CONTEXT.configuration().whenIgnoringPaths("time_zone.current_time"));
     if (ipdataService == TEST_CONTEXT.cachingIpdataService()) {
       //value will be returned from cache now
-      ipdataModel = ipdataService.ipdata("8.8.8.8");
+      ipdataModel = ipdataService.ipdata(fixture.target());
       actual = TEST_CONTEXT.mapper().writeValueAsString(ipdataModel);
       TEST_CONTEXT.assertEqualJson(actual, expected, TEST_CONTEXT.configuration().whenIgnoringPaths("time_zone.current_time"));
     }
@@ -48,7 +44,8 @@ public class FullModelTest {
   @SneakyThrows
   @Test
   public void testSingleFields() {
-    String field = ipdataService.getCountryName("8.8.8.8");
+    IpdataService ipdataService = fixture.service();
+    String field = ipdataService.getCountryName(fixture.target());
     String expected = TEST_CONTEXT.get("/8.8.8.8/country_name", null);
     Assert.assertEquals(field, expected);
   }
@@ -64,12 +61,12 @@ public class FullModelTest {
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
         .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())).get();
-    serviceWithInvalidKey.ipdata("8.8.8.8");
+    serviceWithInvalidKey.ipdata(fixture.target());
   }
 
-  @Parameters
-  public static Iterable<IpdataService> data() {
-    return Arrays.asList(TEST_CONTEXT.ipdataService(), TEST_CONTEXT.cachingIpdataService());
+  @Parameterized.Parameters
+  public static Iterable<TestFixture> data() {
+    return TEST_CONTEXT.fixtures();
   }
 
 }

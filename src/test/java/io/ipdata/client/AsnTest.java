@@ -14,7 +14,6 @@ import org.junit.runners.Parameterized;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Parameterized.class)
@@ -23,19 +22,20 @@ public class AsnTest {
   private static final TestContext TEST_CONTEXT = new TestContext("https://api.ipdata.co");
 
   @Parameterized.Parameter
-  public IpdataService ipdataService;
+  public TestFixture fixture;
 
   @Test
   @SneakyThrows
   public void testASN() {
-    AsnModel asn = ipdataService.asn("8.8.8.8");
+    IpdataService ipdataService = fixture.service();
+    AsnModel asn = ipdataService.asn(fixture.target());
     assertNotNull(asn.type()); /* See: https://github.com/ipdata/java/issues/2 */
     String actual = TEST_CONTEXT.mapper().writeValueAsString(asn);
-    String expected = TEST_CONTEXT.get("/8.8.8.8/asn", null);
+    String expected = TEST_CONTEXT.get("/"+fixture.target()+"/asn", null);
     TEST_CONTEXT.assertEqualJson(actual, expected);
     if (ipdataService == TEST_CONTEXT.cachingIpdataService()) {
       //value will be returned from cache now
-      asn = ipdataService.asn("8.8.8.8");
+      asn = ipdataService.asn(fixture.target());
       assertNotNull(asn.type());
       actual = TEST_CONTEXT.mapper().writeValueAsString(asn);
       TEST_CONTEXT.assertEqualJson(actual, expected);
@@ -53,12 +53,12 @@ public class AsnTest {
         .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())
       ).get();
-    serviceWithInvalidKey.asn("8.8.8.8");
+    serviceWithInvalidKey.asn(fixture.target());
   }
 
   @Parameterized.Parameters
-  public static Iterable<IpdataService> data() {
-    return asList(TEST_CONTEXT.ipdataService(), TEST_CONTEXT.cachingIpdataService());
+  public static Iterable<TestFixture> data() {
+    return TEST_CONTEXT.fixtures();
   }
 
 }

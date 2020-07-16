@@ -27,6 +27,7 @@ import java.util.Map;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
 import static java.lang.System.getenv;
+import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 
 @Getter
@@ -107,6 +108,16 @@ public class TestContext {
     httpPost.setEntity(new StringEntity(content));
     HttpResponse response = httpClient.execute(httpPost);
     return CharStreams.toString(new InputStreamReader(response.getEntity().getContent()));
+  }
+
+
+  public Iterable<TestFixture> fixtures() {
+    return asList(
+      new TestFixture("8.8.8.8", ipdataService()),
+      new TestFixture("8.8.8.8", cachingIpdataService()),
+      new TestFixture("2001:4860:4860::8888", ipdataService()),
+      new TestFixture("2001:4860:4860::8888", cachingIpdataService())
+    );
   }
 
 }

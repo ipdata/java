@@ -1,10 +1,11 @@
 package io.ipdata.client;
 
 import io.ipdata.client.service.CacheConfig;
-import java.util.concurrent.TimeUnit;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.concurrent.TimeUnit;
 
 @Accessors(fluent = true)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)

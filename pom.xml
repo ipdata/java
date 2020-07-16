@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>co.ipdata.client</groupId>
   <artifactId>ipdata-java-client</artifactId>
-  <version>0.1.1</version>
+  <version>0.2.0</version>
   <description>A java client for ipdata.co</description>
   <name>Ipdata java client</name>
   <url>https://github.com/ipdata/java</url>
@@ -23,7 +23,7 @@
     <connection>scm:git:git@github.com:ipdata/java.git</connection>
     <developerConnection>scm:git:git@github.com:ipdata/java.git</developerConnection>
     <url>https://github.com/ipdata/java</url>
-    <tag>ipdata-java-0.1.1</tag>
+    <tag>0.2.0</tag>
   </scm>
   <distributionManagement>
     <repository>

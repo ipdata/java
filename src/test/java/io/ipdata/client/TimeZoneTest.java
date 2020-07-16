@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertNotNull;
@@ -23,19 +22,20 @@ public class TimeZoneTest {
   private static final TestContext TEST_CONTEXT = new TestContext("https://api.ipdata.co");
 
   @Parameterized.Parameter
-  public IpdataService ipdataService;
+  public TestFixture fixture;
 
   @Test
   @SneakyThrows
   public void testTimeZone() {
-    TimeZone timeZone = ipdataService.timeZone("8.8.8.8");
-    String expected = TEST_CONTEXT.get("/8.8.8.8/time_zone", null);
+    IpdataService ipdataService = fixture.service();
+    TimeZone timeZone = fixture.service().timeZone(fixture.target());
+    String expected = TEST_CONTEXT.get("/"+fixture.target()+"/time_zone", null);
     String actual = TEST_CONTEXT.mapper().writeValueAsString(timeZone);
     TEST_CONTEXT.assertEqualJson(actual, expected, TEST_CONTEXT.configuration().whenIgnoringPaths("current_time"));
     assertNotNull(timeZone.currentTime());
     if (ipdataService == TEST_CONTEXT.cachingIpdataService()) {
       //value will be returned from cache now
-      timeZone = ipdataService.timeZone("8.8.8.8");
+      timeZone = ipdataService.timeZone(fixture.target());
       actual = TEST_CONTEXT.mapper().writeValueAsString(timeZone);
       TEST_CONTEXT.assertEqualJson(actual, expected, TEST_CONTEXT.configuration().whenIgnoringPaths("current_time"));
       assertNotNull(timeZone.currentTime());
@@ -52,12 +52,12 @@ public class TimeZoneTest {
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
         .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())).get();
-    serviceWithInvalidKey.timeZone("8.8.8.8");
+    serviceWithInvalidKey.timeZone(fixture.target());
   }
 
   @Parameterized.Parameters
-  public static Iterable<IpdataService> data() {
-    return Arrays.asList(TEST_CONTEXT.ipdataService(), TEST_CONTEXT.cachingIpdataService());
+  public static Iterable<TestFixture> data() {
+    return TEST_CONTEXT.fixtures();
   }
 
 }

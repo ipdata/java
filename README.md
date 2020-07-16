@@ -26,7 +26,7 @@ You can have the library from Maven Central.
 <dependency>
     <groupId>co.ipdata.client</groupId>
     <artifactId>ipdata-java-client</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
@@ -144,7 +144,7 @@ ThreatModel threat = ipdataService.threat("1.1.1.1");
 The list of available fields is available [here](https://docs.ipdata.co/api-reference/response-fields)
 
 #### Multiple Field Selection
-If you're interested by multiple fields for a given IP address, you'll use the ``getFields`` method:
+If you're interested in multiple fields for a given IP address, you'll use the ``getFields`` method:
 ```java
 import io.ipdata.client.service.IpdataField;
 import io.ipdata.client.service.IpdataService;
