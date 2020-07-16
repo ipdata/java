@@ -42,13 +42,6 @@ public class IpdataModel {
   //meta
   private String count;
 
-  /**
-   * Rely on organisation field instead.
-   * @deprecated Use organisation instead
-   */
-  @Deprecated
-  private String organization;
-
   public boolean isEu() {
     return eu;
   }

@@ -30,6 +30,16 @@ public class BulkTest {
     TEST_CONTEXT.assertEqualJson(expected, actual, TEST_CONTEXT.configuration().whenIgnoringPaths("[0].time_zone.current_time", "[1].time_zone.current_time", "[0].count", "[1].count"));
   }
 
+  @SneakyThrows
+  @Test
+  public void testBulkResponseIpv6() {
+    List<IpdataModel> ipdataModels = ipdataService.bulk(Arrays.asList("2001:4860:4860::8888", "2001:4860:4860::8844"));
+    String actual = TEST_CONTEXT.mapper().writeValueAsString(ipdataModels);
+    String expected = TEST_CONTEXT.post("/bulk", "[\"2001:4860:4860::8888\",\"2001:4860:4860::8844\"]", null);
+    expected = TEST_CONTEXT.mapper().writeValueAsString(TEST_CONTEXT.mapper().readValue(expected, IpdataModel[].class));
+    TEST_CONTEXT.assertEqualJson(expected, actual, TEST_CONTEXT.configuration().whenIgnoringPaths("[0].time_zone.current_time", "[1].time_zone.current_time", "[0].count", "[1].count"));
+  }
+
   @Parameterized.Parameters
   public static Iterable<IpdataService> data() {
     return asList(TEST_CONTEXT.ipdataService(), TEST_CONTEXT.cachingIpdataService());

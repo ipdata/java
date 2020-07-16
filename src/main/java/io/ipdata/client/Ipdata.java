@@ -4,14 +4,15 @@ import feign.Client;
 import io.ipdata.client.service.CacheConfig;
 import io.ipdata.client.service.IpdataService;
 import io.ipdata.client.service.IpdataServiceBuilder;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 import org.slf4j.Logger;
+
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 @UtilityClass
 public class Ipdata {
