@@ -4,6 +4,7 @@
   "city": "test-city",
   "region": "Illinois",
   "region_code": "IL",
+  "region_type": "state",
   "country_name": "United States",
   "country_code": "US",
   "continent_name": "North America",
@@ -26,6 +27,12 @@
     "name": "Verizon",
     "mcc": "310",
     "mnc": "004"
+  },
+  "company": {
+    "name": "Verizon Wireless",
+    "domain": "verizonwireless.com",
+    "network": "69.78.0.0/16",
+    "type": "business"
   },
   "languages": [
     {
@@ -54,7 +61,9 @@
     "is_known_attacker": false,
     "is_known_abuser": false,
     "is_threat": false,
-    "is_bogon": false
+    "is_bogon": false,
+    "is_icloud_relay": false,
+    "is_datacenter": false
   },
   "count": "236"
 }
