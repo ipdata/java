@@ -48,9 +48,9 @@
     <sonar.projectKey>yassine_ipdata-java-client</sonar.projectKey>
     <sonar.projectName>ipdata-java-client</sonar.projectName>
     <sonar.projectVersion>${project.version}</sonar.projectVersion>
-    <version.build.jacoco>0.8.13</version.build.jacoco>
-    <version.build.sonar>5.1.0.4751</version.build.sonar>
-    <version.build.surefire>3.5.4</version.build.surefire>
+    <version.build.jacoco>0.8.14</version.build.jacoco>
+    <version.build.sonar>3.11.0.3922</version.build.sonar>
+    <version.build.surefire>3.5.5</version.build.surefire>
     <version.client.feign>11.10</version.client.feign>
   </properties>
   <dependencies>
@@ -121,7 +121,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.4.0</version>
+        <version>3.3.1</version>
         <configuration>
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
@@ -175,7 +175,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.4.0</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <goals>
