@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 @RunWith(Parameterized.class)
 public class MultipleFieldsSelectionTest {
 
-  private static final TestContext TEST_CONTEXT = new TestContext("https://api.ipdata.co");
+  private static final TestContext TEST_CONTEXT = new TestContext(MockIpdataServer.API_KEY, MockIpdataServer.getInstance().getUrl());
 
   @Parameterized.Parameter
   public IpdataService ipdataService;

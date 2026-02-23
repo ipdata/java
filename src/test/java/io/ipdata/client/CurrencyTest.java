@@ -5,19 +5,17 @@ import io.ipdata.client.error.IpdataException;
 import io.ipdata.client.model.Currency;
 import io.ipdata.client.service.IpdataService;
 import lombok.SneakyThrows;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(Parameterized.class)
 public class CurrencyTest {
 
-  private static final TestContext TEST_CONTEXT = new TestContext("https://api.ipdata.co");
+  private static final TestContext TEST_CONTEXT = new TestContext(MockIpdataServer.API_KEY, MockIpdataServer.getInstance().getUrl());
 
   @Parameterized.Parameter
   public TestFixture fixture;
@@ -41,12 +39,11 @@ public class CurrencyTest {
   @SneakyThrows
   @Test(expected = IpdataException.class)
   public void testCurrencyError() {
-    URL url = new URL("https://api.ipdata.co");
-    IpdataService serviceWithInvalidKey = Ipdata.builder().url(url)
+    IpdataService serviceWithInvalidKey = Ipdata.builder().url(TEST_CONTEXT.url())
       .key("THIS_IS_AN_INVALID_KEY")
       .withDefaultCache()
       .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setSSLHostnameVerifier(new NoopHostnameVerifier()).setConnectionTimeToLive(10, TimeUnit.SECONDS)
+        .setConnectionTimeToLive(10, TimeUnit.SECONDS)
         .build())
       ).get();
     serviceWithInvalidKey.currency(fixture.target());

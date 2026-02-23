@@ -20,4 +20,8 @@ public class ThreatModel {
   private boolean threat;
   @JsonProperty("is_bogon")
   private boolean bogon;
+  @JsonProperty("is_icloud_relay")
+  private boolean icloudRelay;
+  @JsonProperty("is_datacenter")
+  private boolean datacenter;
 }

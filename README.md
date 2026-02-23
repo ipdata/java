@@ -43,7 +43,15 @@ IpdataService ipdataService = Ipdata.builder().url(url)
       .key("MY_KEY").get();
 /.../
 ```
-Optionally, you can configure a cache for faster access (less than 1ms latency on requests that hit the cache). 
+
+To use the EU endpoint for GDPR compliance, pass the EU API URL instead:
+```java
+URL url = new URL("https://eu-api.ipdata.co");
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY").get();
+```
+
+Optionally, you can configure a cache for faster access (less than 1ms latency on requests that hit the cache).
 
 The cache is configurable for time and space eviction policies:
 
@@ -79,6 +87,7 @@ Output:
     "city": null,
     "region": null,
     "region_code": null,
+    "region_type": null,
     "country_name": "Australia",
     "country_code": "AU",
     "continent_name": "Oceania",
@@ -95,6 +104,12 @@ Output:
         "name": "Cloudflare, Inc.",
         "domain": "cloudflare.com",
         "route": "1.1.1.0/24",
+        "type": "hosting"
+    },
+    "company": {
+        "name": "Cloudflare, Inc.",
+        "domain": "cloudflare.com",
+        "network": "1.1.1.0/24",
         "type": "hosting"
     },
     "languages": [
@@ -124,7 +139,9 @@ Output:
         "is_known_attacker": false,
         "is_known_abuser": false,
         "is_threat": false,
-        "is_bogon": false
+        "is_bogon": false,
+        "is_icloud_relay": false,
+        "is_datacenter": false
     },
     "count": "0"
 }

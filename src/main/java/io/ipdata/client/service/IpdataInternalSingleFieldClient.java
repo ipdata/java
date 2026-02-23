@@ -40,7 +40,7 @@ interface IpdataInternalSingleFieldClient {
   @RequestLine("GET /{ip}/postal")
   String getPostal(@Param(value = "ip", encoded = true) String ip) throws IpdataException;
 
-  @RequestLine("GET /{ip}/asn")
+  @RequestLine("GET /{ip}/calling_code")
   String getCallingCode(@Param(value = "ip", encoded = true) String ip) throws IpdataException;
 
   @RequestLine("GET /{ip}/flag")

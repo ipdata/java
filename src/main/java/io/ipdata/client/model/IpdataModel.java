@@ -22,6 +22,7 @@ public class IpdataModel {
 
   private String region;
   private String regionCode;
+  private String regionType;
   private String countryName;
   private String countryCode;
   private String continentName;
@@ -35,6 +36,7 @@ public class IpdataModel {
   private String emojiUnicode;
   private AsnModel asn;
   private Carrier carrier;
+  private Company company;
   private List<Language> languages;
   private Currency currency;
   private TimeZone timeZone;
