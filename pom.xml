@@ -39,17 +39,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/code-coverage/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.links.homepage>https://github.com/ipdata/java</sonar.links.homepage>
-    <sonar.links.issue>https://github.com/ipdata/java</sonar.links.issue>
-    <sonar.links.scm>https://github.com/ipdata/java</sonar.links.scm>
-    <sonar.organization>yassine-github</sonar.organization>
-    <sonar.projectKey>yassine_ipdata-java-client</sonar.projectKey>
-    <sonar.projectName>ipdata-java-client</sonar.projectName>
-    <sonar.projectVersion>${project.version}</sonar.projectVersion>
     <version.build.jacoco>0.8.14</version.build.jacoco>
-    <version.build.sonar>3.11.0.3922</version.build.sonar>
     <version.build.surefire>3.5.5</version.build.surefire>
     <version.client.feign>11.10</version.client.feign>
   </properties>
@@ -168,12 +158,7 @@
           <argLine>${surefireArgLine}</argLine>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>${version.build.sonar}</version>
-      </plugin>
-      <plugin>
+<plugin>
         <artifactId>maven-source-plugin</artifactId>
         <version>3.3.1</version>
         <executions>
