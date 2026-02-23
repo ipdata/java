@@ -9,7 +9,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import feign.Client;
 import feign.Feign;
-import feign.httpclient.ApacheHttpClient;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import io.ipdata.client.model.*;
@@ -42,7 +41,7 @@ public class IpdataServiceBuilder {
     final ApiErrorDecoder apiErrorDecoder = new ApiErrorDecoder(mapper, customLogger);
 
     final IpdataInternalClient client = Feign.builder()
-      .client(httpClient == null ? new ApacheHttpClient() : httpClient)
+      .client(new Ipv6SafeClient(httpClient == null ? new Client.Default(null, null) : httpClient))
       .decoder(new JacksonDecoder(mapper))
       .encoder(new JacksonEncoder(mapper))
       .requestInterceptor(keyRequestInterceptor)
@@ -50,7 +49,7 @@ public class IpdataServiceBuilder {
       .target(IpdataInternalClient.class, url.toString());
 
     final IpdataInternalSingleFieldClient singleFieldClient = Feign.builder()
-      .client(httpClient == null ? new ApacheHttpClient() : httpClient)
+      .client(new Ipv6SafeClient(httpClient == null ? new Client.Default(null, null) : httpClient))
       .decoder(new FieldDecoder(mapper))
       .encoder(new JacksonEncoder(mapper))
       .requestInterceptor(keyRequestInterceptor)

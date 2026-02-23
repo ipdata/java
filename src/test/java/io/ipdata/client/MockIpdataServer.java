@@ -29,6 +29,7 @@ public class MockIpdataServer {
   private final String url;
   private final Map<String, JsonNode> fixtures = new HashMap<>();
   private final ObjectMapper mapper = new ObjectMapper();
+  private volatile String lastRawPath;
 
   private MockIpdataServer() {
     try {
@@ -54,6 +55,10 @@ public class MockIpdataServer {
     return url;
   }
 
+  public String getLastRawPath() {
+    return lastRawPath;
+  }
+
   private void loadFixtures() {
     String[] ips = {"8.8.8.8", "2001:4860:4860::8888", "1.1.1.1", "2001:4860:4860::8844", "41.128.21.123"};
     for (String ip : ips) {
@@ -72,6 +77,7 @@ public class MockIpdataServer {
     try {
       String method = exchange.getRequestMethod();
       String path = exchange.getRequestURI().getPath();
+      lastRawPath = exchange.getRequestURI().getRawPath();
       String rawQuery = exchange.getRequestURI().getRawQuery();
       Map<String, String> params = parseQuery(rawQuery);
 

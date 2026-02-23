@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
-import feign.httpclient.ApacheHttpClient;
 import io.ipdata.client.service.IpdataService;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -17,7 +16,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -56,17 +54,11 @@ public class TestContext {
     mapper.setPropertyNamingStrategy(CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
     mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-    httpClient = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
+    httpClient = HttpClientBuilder.create().build();
     ipdataService = Ipdata.builder().url(this.url).key(this.key)
       .noCache()
-      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setSSLHostnameVerifier(new NoopHostnameVerifier())
-        .build())
-      ).get();
+      .get();
     cachingIpdataService = Ipdata.builder().url(this.url)
-      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setSSLHostnameVerifier(new NoopHostnameVerifier())
-        .build()))
       .withDefaultCache().key(key).get();
   }
 
