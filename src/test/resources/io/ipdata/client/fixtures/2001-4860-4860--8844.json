@@ -1,0 +1,69 @@
+{
+  "ip": "2001:4860:4860::8844",
+  "is_eu": false,
+  "city": "Mountain View",
+  "region": "California",
+  "region_code": "CA",
+  "region_type": "state",
+  "country_name": "United States",
+  "country_code": "US",
+  "continent_name": "North America",
+  "continent_code": "NA",
+  "latitude": 37.386,
+  "longitude": -122.0838,
+  "postal": "94035",
+  "calling_code": "1",
+  "flag": "https://ipdata.co/flags/us.png",
+  "emoji_flag": "\ud83c\uddfa\ud83c\uddf8",
+  "emoji_unicode": "U+1F1FA U+1F1F8",
+  "asn": {
+    "asn": "AS15169",
+    "name": "Google LLC",
+    "domain": "google.com",
+    "route": "2001:4860::/32",
+    "type": "hosting"
+  },
+  "carrier": {
+    "name": "Google",
+    "mcc": "310",
+    "mnc": "000"
+  },
+  "company": {
+    "name": "Google LLC",
+    "domain": "google.com",
+    "network": "2001:4860::/32",
+    "type": "hosting"
+  },
+  "languages": [
+    {
+      "name": "English",
+      "native": "English"
+    }
+  ],
+  "currency": {
+    "name": "US Dollar",
+    "code": "USD",
+    "symbol": "$",
+    "native": "$",
+    "plural": "US dollars"
+  },
+  "time_zone": {
+    "name": "America/Los_Angeles",
+    "abbr": "PDT",
+    "offset": "-0700",
+    "is_dst": true,
+    "current_time": "2020-06-12T06:37:16.595612-07:00"
+  },
+  "threat": {
+    "is_tor": false,
+    "is_proxy": false,
+    "is_anonymous": false,
+    "is_known_attacker": false,
+    "is_known_abuser": false,
+    "is_threat": false,
+    "is_bogon": false,
+    "is_icloud_relay": false,
+    "is_datacenter": false
+  },
+  "count": "1500"
+}
