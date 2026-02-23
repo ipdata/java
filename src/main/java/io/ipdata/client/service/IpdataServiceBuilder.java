@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
-import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
+import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 
 @RequiredArgsConstructor(staticName = "of")
 public class IpdataServiceBuilder {
@@ -31,7 +31,7 @@ public class IpdataServiceBuilder {
 
   public IpdataService build() {
     final ObjectMapper mapper = new ObjectMapper();
-    mapper.setPropertyNamingStrategy(CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+    mapper.setPropertyNamingStrategy(SNAKE_CASE);
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);

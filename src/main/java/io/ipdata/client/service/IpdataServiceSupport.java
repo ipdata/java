@@ -31,14 +31,9 @@ class IpdataServiceSupport implements IpdataService {
   }
 
   @Override
-  public IpdataModel[] bulkAsArray(List<String> ips) throws IpdataException {
-    return bulk(ips).toArray(new IpdataModel[0]);
-  }
-
-  @Override
   public IpdataModel getFields(String ip, IpdataField<?>... fields) throws IpdataException {
     if (fields.length == 0) {
-      return null;
+      throw new IllegalArgumentException("At least one field must be specified");
     }
     //sorting here to improve the likelihood of a cache hit, otherwise a permutation of the same
     //array would result into a different cache key, and thus a cache miss

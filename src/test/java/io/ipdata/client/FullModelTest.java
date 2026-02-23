@@ -1,17 +1,14 @@
 package io.ipdata.client;
 
-import feign.httpclient.ApacheHttpClient;
 import io.ipdata.client.error.IpdataException;
+import io.ipdata.client.error.RemoteIpdataException;
 import io.ipdata.client.model.IpdataModel;
 import io.ipdata.client.service.IpdataService;
 import lombok.SneakyThrows;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import java.util.concurrent.TimeUnit;
 
 
 @RunWith(Parameterized.class)
@@ -44,21 +41,24 @@ public class FullModelTest {
   public void testSingleFields() {
     IpdataService ipdataService = fixture.service();
     String field = ipdataService.getCountryName(fixture.target());
-    String expected = TEST_CONTEXT.get("/8.8.8.8/country_name", null);
-    Assert.assertEquals(field, expected);
+    String expected = TEST_CONTEXT.get("/" + fixture.target() + "/country_name", null);
+    Assert.assertEquals(expected, field);
   }
 
 
   @SneakyThrows
-  @Test(expected = IpdataException.class)
+  @Test
   public void testError() {
     IpdataService serviceWithInvalidKey = Ipdata.builder().url(TEST_CONTEXT.url())
       .key("THIS_IS_AN_INVALID_KEY")
-      .withDefaultCache()
-      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setConnectionTimeToLive(10, TimeUnit.SECONDS)
-        .build())).get();
-    serviceWithInvalidKey.ipdata(fixture.target());
+      .noCache()
+      .get();
+    try {
+      serviceWithInvalidKey.ipdata(fixture.target());
+      Assert.fail("Expected RemoteIpdataException");
+    } catch (RemoteIpdataException e) {
+      Assert.assertEquals(401, e.getStatus());
+    }
   }
 
   @Parameterized.Parameters

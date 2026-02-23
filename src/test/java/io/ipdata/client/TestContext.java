@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Map;
 
-import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
+import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 import static java.lang.System.getenv;
 import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
@@ -51,7 +51,7 @@ public class TestContext {
     this.key = key;
     this.url = new URL(url);
     mapper = new ObjectMapper();
-    mapper.setPropertyNamingStrategy(CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+    mapper.setPropertyNamingStrategy(SNAKE_CASE);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
     mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     httpClient = HttpClientBuilder.create().build();
