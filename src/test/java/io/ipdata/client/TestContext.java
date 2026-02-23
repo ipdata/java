@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
-import feign.httpclient.ApacheHttpClient;
 import io.ipdata.client.service.IpdataService;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -17,7 +16,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -25,7 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Map;
 
-import static com.fasterxml.jackson.databind.PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES;
+import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 import static java.lang.System.getenv;
 import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
@@ -53,20 +51,14 @@ public class TestContext {
     this.key = key;
     this.url = new URL(url);
     mapper = new ObjectMapper();
-    mapper.setPropertyNamingStrategy(CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+    mapper.setPropertyNamingStrategy(SNAKE_CASE);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
     mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-    httpClient = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
+    httpClient = HttpClientBuilder.create().build();
     ipdataService = Ipdata.builder().url(this.url).key(this.key)
       .noCache()
-      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setSSLHostnameVerifier(new NoopHostnameVerifier())
-        .build())
-      ).get();
+      .get();
     cachingIpdataService = Ipdata.builder().url(this.url)
-      .feignClient(new ApacheHttpClient(HttpClientBuilder.create()
-        .setSSLHostnameVerifier(new NoopHostnameVerifier())
-        .build()))
       .withDefaultCache().key(key).get();
   }
 

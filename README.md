@@ -1,9 +1,5 @@
 # ipdata-java-client
-![Build Status](https://www.travis-ci.org/yassine/ipdata-java-client.svg?branch=master)
-[![Coverage Status](https://sonarcloud.io/api/project_badges/measure?metric=coverage&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?metric=alert_status&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?metric=sqale_rating&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
-[![Reliability](https://sonarcloud.io/api/project_badges/measure?metric=reliability_rating&project=yassine_ipdata-java-client)](https://sonarcloud.io/dashboard/index/yassine_ipdata-java-client)
+![Build Status](https://github.com/ipdata/java/actions/workflows/ci.yml/badge.svg)
 
 
 An 100% compliant [ipdata.co](https://ipdata.co) API java client.

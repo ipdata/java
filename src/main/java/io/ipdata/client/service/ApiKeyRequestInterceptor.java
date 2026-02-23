@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +23,7 @@ class ApiKeyRequestInterceptor implements RequestInterceptor {
     String version;
     try {
       version = CharStreams.toString(new InputStreamReader(ApiKeyRequestInterceptor.class
-        .getResourceAsStream("/io/ipdata/client/VERSION"))).replaceAll("\\n", "");
+        .getResourceAsStream("/io/ipdata/client/VERSION"), StandardCharsets.UTF_8)).replaceAll("\\n", "");
       version = String.format("io.ipdata.client.java.%s", version);
     } catch (Exception e) {
       log.error(e.getMessage(), e);

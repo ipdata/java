@@ -29,12 +29,20 @@ class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingl
   private final LoadingCache<String, Currency> currencyCache;
   private final LoadingCache<String, ThreatModel> threatCache;
 
+  private static IpdataException unwrap(ExecutionException e) throws IpdataException {
+    Throwable cause = e.getCause();
+    if (cause instanceof IpdataException) {
+      throw (IpdataException) cause;
+    }
+    throw new IpdataException(cause != null ? cause.getMessage() : e.getMessage(), cause != null ? cause : e);
+  }
+
   @Override
   public IpdataModel getFields(String ip, String fields) throws IpdataException {
     try {
       return fieldsCache.get(HashPair.of(ip, fields));
     } catch (ExecutionException e) {
-      throw new IpdataException(e.getMessage(), e);
+      throw unwrap(e);
     }
   }
 
@@ -43,7 +51,7 @@ class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingl
     try {
       return asnCache.get(ip);
     } catch (ExecutionException e) {
-      throw new IpdataException(e.getMessage(), e);
+      throw unwrap(e);
     }
   }
 
@@ -52,7 +60,7 @@ class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingl
     try {
       return tzCache.get(ip);
     } catch (ExecutionException e) {
-      throw new IpdataException(e.getMessage(), e);
+      throw unwrap(e);
     }
   }
 
@@ -61,7 +69,7 @@ class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingl
     try {
       return currencyCache.get(ip);
     } catch (ExecutionException e) {
-      throw new IpdataException(e.getMessage(), e);
+      throw unwrap(e);
     }
   }
 
@@ -70,7 +78,7 @@ class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingl
     try {
       return threatCache.get(ip);
     } catch (ExecutionException e) {
-      throw new IpdataException(e.getMessage(), e);
+      throw unwrap(e);
     }
   }
 
@@ -79,7 +87,7 @@ class CachingInternalClient implements IpdataInternalClient, IpdataInternalSingl
     try {
       return ipdataCache.get(ip);
     } catch (ExecutionException e) {
-      throw new IpdataException(e.getMessage(), e);
+      throw unwrap(e);
     }
   }
 

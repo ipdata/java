@@ -1,6 +1,7 @@
 package io.ipdata.client.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -8,6 +9,8 @@ import lombok.ToString;
 public class ThreatModel {
   @JsonProperty("is_tor")
   private boolean tor;
+  @JsonProperty("is_vpn")
+  private boolean vpn;
   @JsonProperty("is_proxy")
   private boolean proxy;
   @JsonProperty("is_anonymous")
@@ -24,4 +27,6 @@ public class ThreatModel {
   private boolean icloudRelay;
   @JsonProperty("is_datacenter")
   private boolean datacenter;
+  private List<Blocklist> blocklists;
+  private Scores scores;
 }
