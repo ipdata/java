@@ -199,6 +199,10 @@
         <version>3.2.8</version>
         <configuration>
           <keyname>FB32919AB5830162299F4125C49AB890BA00B57D</keyname>
+          <gpgArguments>
+            <arg>--pinentry-mode</arg>
+            <arg>loopback</arg>
+          </gpgArguments>
         </configuration>
         <executions>
           <execution>
