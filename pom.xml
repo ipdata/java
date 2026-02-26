@@ -198,7 +198,7 @@
         <artifactId>maven-gpg-plugin</artifactId>
         <version>3.2.8</version>
         <configuration>
-          <keyname>A143FB3D9A4D90CC76DE768495FD65EAEFC32F7E</keyname>
+          <keyname>FB32919AB5830162299F4125C49AB890BA00B57D</keyname>
         </configuration>
         <executions>
           <execution>
