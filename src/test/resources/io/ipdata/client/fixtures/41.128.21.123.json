@@ -37,7 +37,8 @@
   "languages": [
     {
       "name": "Arabic",
-      "native": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+      "native": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+      "code": "ar"
     }
   ],
   "currency": {

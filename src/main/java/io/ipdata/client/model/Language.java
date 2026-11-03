@@ -10,5 +10,7 @@ public class Language {
   private String name;
   @JsonProperty("native")
   private String nativeName;
+  /** The language code, for example {@code en} for English; {@code null} when the API does not send it. */
+  private String code;
   private int rtl;
 }

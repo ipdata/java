@@ -39,7 +39,8 @@
   "languages": [
     {
       "name": "English",
-      "native": "English"
+      "native": "English",
+      "code": "en"
     }
   ],
   "currency": {
