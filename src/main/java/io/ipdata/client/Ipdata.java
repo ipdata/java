@@ -1,6 +1,7 @@
 package io.ipdata.client;
 
 import feign.Client;
+import feign.Request;
 import io.ipdata.client.service.CacheConfig;
 import io.ipdata.client.service.IpdataService;
 import io.ipdata.client.service.IpdataServiceBuilder;
@@ -47,10 +48,27 @@ public class Ipdata {
     @Setter
     private Logger logger;
     /**
-     * (Optional) Configures a custom Feign client (If you wanna use this with Ribbon or Hystrix for example).
+     * (Optional) Configures a custom Feign client, for example Apache HttpClient ({@code feign-httpclient}),
+     * OkHttp ({@code feign-okhttp}) or a Ribbon/Hystrix wrapper.
+     * <p>
+     * The default is the JDK HTTP/2 client ({@code feign.http2client.Http2Client} from {@code feign-java11}),
+     * which keeps one persistent connection pool for the lifetime of the service and multiplexes requests over
+     * HTTP/2 when the server negotiates it, falling back to HTTP/1.1 keep-alive otherwise. An injected client
+     * is shared by all calls of the built service (full model, single field and bulk), so configure its
+     * connection pooling there; the {@code options(Request.Options)} are passed to it on every request.
      */
     @Setter
     private Client feignClient;
+    /**
+     * (Optional) Connect and read timeouts and the redirect policy of the HTTP transport, shared by all calls
+     * of the built service. Defaults to {@code new Request.Options()}: 10 seconds to connect, 60 seconds to
+     * read, follow redirects. With the default transport both timeouts must be positive.
+     *
+     * @see #connectTimeout(long, TimeUnit)
+     * @see #readTimeout(long, TimeUnit)
+     */
+    @Setter
+    private Request.Options options;
 
     /**
      * Overrides current cache config with null (no caching).
@@ -87,6 +105,52 @@ public class Ipdata {
     }
 
     /**
+     * Sets the connect timeout of the HTTP transport (default: 10 seconds), keeping the other request options.
+     * Shorthand for {@code options(Request.Options)} with only the connect timeout changed.
+     *
+     * @param timeout the connect timeout, greater than 0
+     * @param unit    the unit of the timeout
+     * @return this builder
+     * @see Request.Options
+     */
+    public Builder connectTimeout(long timeout, TimeUnit unit) {
+      Request.Options current = currentOptions();
+      this.options = new Request.Options(checkTimeout(timeout, unit), unit,
+        current.readTimeout(), current.readTimeoutUnit(), current.isFollowRedirects());
+      return this;
+    }
+
+    /**
+     * Sets the read timeout of the HTTP transport (default: 60 seconds), keeping the other request options.
+     * Shorthand for {@code options(Request.Options)} with only the read timeout changed.
+     *
+     * @param timeout the read timeout, greater than 0
+     * @param unit    the unit of the timeout
+     * @return this builder
+     * @see Request.Options
+     */
+    public Builder readTimeout(long timeout, TimeUnit unit) {
+      Request.Options current = currentOptions();
+      this.options = new Request.Options(current.connectTimeout(), current.connectTimeoutUnit(),
+        checkTimeout(timeout, unit), unit, current.isFollowRedirects());
+      return this;
+    }
+
+    private Request.Options currentOptions() {
+      return options == null ? new Request.Options() : options;
+    }
+
+    private static long checkTimeout(long timeout, TimeUnit unit) {
+      if (timeout <= 0) {
+        throw new IllegalArgumentException("timeout must be greater than 0");
+      }
+      if (unit == null) {
+        throw new IllegalArgumentException("timeout unit should not be null");
+      }
+      return timeout;
+    }
+
+    /**
      * @return An Ipdata api facade
      * @see io.ipdata.client.service.IpdataService
      */
@@ -97,7 +161,7 @@ public class Ipdata {
       if (url == null) {
         throw new IllegalArgumentException("Target URL can't be null");
       }
-      return IpdataServiceBuilder.of(url, key, cacheConfig, logger, feignClient).build();
+      return IpdataServiceBuilder.of(url, key, cacheConfig, logger, feignClient, options).build();
     }
 
   }

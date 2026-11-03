@@ -1,0 +1,73 @@
+{
+  "ip": "98.97.34.0",
+  "is_satellite": true,
+  "is_eu": false,
+  "city": "Seattle",
+  "region": "Washington",
+  "region_code": "WA",
+  "region_type": "state",
+  "country_name": "United States",
+  "country_code": "US",
+  "continent_name": "North America",
+  "continent_code": "NA",
+  "latitude": 47.6062,
+  "longitude": -122.3321,
+  "postal": "98101",
+  "calling_code": "1",
+  "flag": "https://ipdata.co/flags/us.png",
+  "emoji_flag": "🇺🇸",
+  "emoji_unicode": "U+1F1FA U+1F1F8",
+  "asn": {
+    "asn": "AS14593",
+    "name": "Space Exploration Technologies Corporation",
+    "domain": "spacex.com",
+    "route": "98.97.32.0/21",
+    "type": "business"
+  },
+  "company": {
+    "name": "Space Exploration Technologies Corporation",
+    "domain": "spacex.com",
+    "network": "98.97.32.0/21",
+    "type": "business"
+  },
+  "languages": [
+    {
+      "name": "English",
+      "native": "English"
+    }
+  ],
+  "currency": {
+    "name": "US Dollar",
+    "code": "USD",
+    "symbol": "$",
+    "native": "$",
+    "plural": "US dollars"
+  },
+  "time_zone": {
+    "name": "America/Los_Angeles",
+    "abbr": "PST",
+    "offset": "-0800",
+    "is_dst": false,
+    "current_time": "2026-11-02T08:00:00.000000-08:00"
+  },
+  "threat": {
+    "is_tor": false,
+    "is_vpn": false,
+    "is_icloud_relay": false,
+    "is_proxy": false,
+    "is_datacenter": false,
+    "is_anonymous": false,
+    "is_known_attacker": false,
+    "is_known_abuser": false,
+    "is_threat": false,
+    "is_bogon": false,
+    "blocklists": [],
+    "scores": {
+      "vpn_score": 0,
+      "proxy_score": 1,
+      "threat_score": 8,
+      "trust_score": 97
+    }
+  },
+  "count": "0"
+}

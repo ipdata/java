@@ -9,6 +9,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import feign.Client;
 import feign.Feign;
+import feign.Request;
+import feign.http2client.Http2Client;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import io.ipdata.client.model.*;
@@ -20,6 +22,15 @@ import java.net.URL;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 
+/**
+ * Assembles an {@link IpdataService}.
+ * <p>
+ * The full-model proxy ({@code ipdata}, {@code bulk}, {@code getFields}) and the single-field proxy
+ * ({@code asn}, {@code threat}, ...) share one HTTP transport, so every call of the resulting service goes
+ * through the same persistent connection pool. The default transport is the JDK HTTP/2 client
+ * ({@link Http2Client} from {@code feign-java11}): HTTP/2 multiplexing when the server negotiates it,
+ * HTTP/1.1 keep-alive otherwise.
+ */
 @RequiredArgsConstructor(staticName = "of")
 public class IpdataServiceBuilder {
 
@@ -28,6 +39,27 @@ public class IpdataServiceBuilder {
   private final CacheConfig cacheConfig;
   private final Logger logger;
   private final Client httpClient;
+  /**
+   * Connect and read timeouts and the redirect policy, applied to both Feign proxies and used to build the
+   * default transport. {@code null} means {@code new Request.Options()}: 10 seconds connect, 60 seconds read,
+   * follow redirects.
+   */
+  private final Request.Options options;
+
+  /**
+   * Same as the generated {@code of(url, key, cacheConfig, logger, httpClient, options)} factory with default
+   * request options.
+   *
+   * @param url         the API endpoint
+   * @param key         the API key
+   * @param cacheConfig the cache configuration, or {@code null} for no caching
+   * @param logger      the logger to use, or {@code null} for the default one
+   * @param httpClient  a custom Feign client shared by all calls, or {@code null} for the JDK HTTP/2 client
+   * @return a builder
+   */
+  public static IpdataServiceBuilder of(URL url, String key, CacheConfig cacheConfig, Logger logger, Client httpClient) {
+    return of(url, key, cacheConfig, logger, httpClient, null);
+  }
 
   public IpdataService build() {
     final ObjectMapper mapper = new ObjectMapper();
@@ -40,8 +72,16 @@ public class IpdataServiceBuilder {
     final Logger customLogger = this.logger == null ? LoggerFactory.getLogger(IpdataService.class) : this.logger;
     final ApiErrorDecoder apiErrorDecoder = new ApiErrorDecoder(mapper, customLogger);
 
+    final Request.Options requestOptions = this.options == null ? new Request.Options() : this.options;
+    // One transport for both proxies: the java.net.http client behind Http2Client owns a single connection
+    // pool that lives as long as the service does. The very same options instance must be handed to
+    // Http2Client and to Feign (.options below): Http2Client silently builds a new HttpClient, and thus a new
+    // connection, for every request whose options differ from the ones it was constructed with.
+    final Client transport = new Ipv6SafeClient(httpClient != null ? httpClient : new Http2Client(requestOptions));
+
     final IpdataInternalClient client = Feign.builder()
-      .client(new Ipv6SafeClient(httpClient == null ? new Client.Default(null, null) : httpClient))
+      .client(transport)
+      .options(requestOptions)
       .decoder(new JacksonDecoder(mapper))
       .encoder(new JacksonEncoder(mapper))
       .requestInterceptor(keyRequestInterceptor)
@@ -49,7 +89,8 @@ public class IpdataServiceBuilder {
       .target(IpdataInternalClient.class, url.toString());
 
     final IpdataInternalSingleFieldClient singleFieldClient = Feign.builder()
-      .client(new Ipv6SafeClient(httpClient == null ? new Client.Default(null, null) : httpClient))
+      .client(transport)
+      .options(requestOptions)
       .decoder(new FieldDecoder(mapper))
       .encoder(new JacksonEncoder(mapper))
       .requestInterceptor(keyRequestInterceptor)

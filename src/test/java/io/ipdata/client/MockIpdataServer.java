@@ -15,9 +15,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MockIpdataServer {
 
@@ -27,9 +29,13 @@ public class MockIpdataServer {
 
   private final HttpServer server;
   private final String url;
-  private final Map<String, JsonNode> fixtures = new HashMap<>();
+  private final Map<String, JsonNode> fixtures = new ConcurrentHashMap<>();
   private final ObjectMapper mapper = new ObjectMapper();
   private volatile String lastRawPath;
+  private volatile String lastRawQuery;
+  private volatile String lastProtocol;
+  /** The client socket address (IP and ephemeral port) of every request received, in order. */
+  private final List<InetSocketAddress> remoteAddresses = Collections.synchronizedList(new ArrayList<>());
 
   private MockIpdataServer() {
     try {
@@ -59,8 +65,48 @@ public class MockIpdataServer {
     return lastRawPath;
   }
 
+  /** @return the raw (still percent-encoded) query string of the last request received, or {@code null} */
+  public String getLastRawQuery() {
+    return lastRawQuery;
+  }
+
+  /**
+   * Registers (or replaces) the response served for an IP address, for tests that need a shape the fixture
+   * files do not have.
+   *
+   * @param ip   the address, as it appears in request paths
+   * @param json the full response body
+   * @throws IOException if {@code json} is not valid JSON
+   */
+  public void registerFixture(String ip, String json) throws IOException {
+    fixtures.put(ip, mapper.readTree(json));
+  }
+
+  /** @return the protocol of the last request received, for example {@code HTTP/1.1} */
+  public String getLastProtocol() {
+    return lastProtocol;
+  }
+
+  /**
+   * @return the client socket address of the last request received; two requests carrying the same address
+   * (same ephemeral port) arrived on the same TCP connection
+   */
+  public InetSocketAddress getLastRemoteAddress() {
+    synchronized (remoteAddresses) {
+      return remoteAddresses.isEmpty() ? null : remoteAddresses.get(remoteAddresses.size() - 1);
+    }
+  }
+
+  /** @return a snapshot of the client socket addresses of all requests received so far, in order */
+  public List<InetSocketAddress> getRemoteAddresses() {
+    synchronized (remoteAddresses) {
+      return new ArrayList<>(remoteAddresses);
+    }
+  }
+
   private void loadFixtures() {
-    String[] ips = {"8.8.8.8", "2001:4860:4860::8888", "1.1.1.1", "2001:4860:4860::8844", "41.128.21.123"};
+    String[] ips = {"8.8.8.8", "2001:4860:4860::8888", "1.1.1.1", "2001:4860:4860::8844", "41.128.21.123",
+      "98.97.34.0", "187.13.250.1"};
     for (String ip : ips) {
       String resourceName = "fixtures/" + ip.replace(":", "-") + ".json";
       try (InputStream is = getClass().getResourceAsStream(resourceName)) {
@@ -75,10 +121,13 @@ public class MockIpdataServer {
 
   private void handleRequest(HttpExchange exchange) throws IOException {
     try {
+      remoteAddresses.add(exchange.getRemoteAddress());
+      lastProtocol = exchange.getProtocol();
       String method = exchange.getRequestMethod();
       String path = exchange.getRequestURI().getPath();
       lastRawPath = exchange.getRequestURI().getRawPath();
       String rawQuery = exchange.getRequestURI().getRawQuery();
+      lastRawQuery = rawQuery;
       Map<String, String> params = parseQuery(rawQuery);
 
       String apiKey = params.get("api-key");

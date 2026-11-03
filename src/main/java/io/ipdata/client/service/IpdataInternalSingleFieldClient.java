@@ -16,6 +16,12 @@ interface IpdataInternalSingleFieldClient {
   @RequestLine("GET /{ip}/is_eu")
   boolean isEu(@Param(value = "ip", encoded = true) String ip) throws IpdataException;
 
+  @RequestLine("GET /{ip}/is_satellite")
+  boolean isSatellite(@Param(value = "ip", encoded = true) String ip) throws IpdataException;
+
+  @RequestLine("GET /{ip}/is_anycast")
+  boolean isAnycast(@Param(value = "ip", encoded = true) String ip) throws IpdataException;
+
   @RequestLine("GET /{ip}/city")
   String getCity(@Param(value = "ip", encoded = true) String ip) throws IpdataException;
 

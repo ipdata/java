@@ -1,6 +1,8 @@
 {
   "ip": "69.78.70.144",
   "is_eu": false,
+  "is_satellite": false,
+  "is_anycast": false,
   "city": "test-city",
   "region": "Illinois",
   "region_code": "IL",

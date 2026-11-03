@@ -1,5 +1,6 @@
 {
   "ip": "8.8.8.8",
+  "is_anycast": true,
   "is_eu": false,
   "city": "Mountain View",
   "region": "California",
@@ -57,20 +58,37 @@
   "threat": {
     "is_tor": false,
     "is_vpn": false,
+    "is_icloud_relay": false,
     "is_proxy": false,
+    "is_datacenter": true,
     "is_anonymous": false,
     "is_known_attacker": false,
     "is_known_abuser": false,
     "is_threat": false,
     "is_bogon": false,
-    "is_icloud_relay": false,
-    "is_datacenter": false,
-    "blocklists": [],
+    "blocklists": [
+      {
+        "days_seen": 1,
+        "first_seen": "2026-11-02",
+        "last_seen": "2026-11-02",
+        "name": "ipdata",
+        "site": "https://ipdata.co",
+        "type": "cloud"
+      },
+      {
+        "days_seen": 1,
+        "first_seen": "2026-11-02",
+        "last_seen": "2026-11-02",
+        "name": "ipdata",
+        "site": "https://ipdata.co",
+        "type": "open_resolvers"
+      }
+    ],
     "scores": {
-      "vpn_score": 0,
-      "proxy_score": 0,
-      "threat_score": 0,
-      "trust_score": 100
+      "vpn_score": 100,
+      "proxy_score": 93,
+      "threat_score": 100,
+      "trust_score": 2
     }
   },
   "count": "1500"

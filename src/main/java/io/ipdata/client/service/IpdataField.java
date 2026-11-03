@@ -14,6 +14,8 @@ import lombok.experimental.Accessors;
 public class IpdataField<T> {
   public static final IpdataField<String> IP = new IpdataField<String>("ip", String.class);
   public static final IpdataField<Boolean> IS_EU = new IpdataField<Boolean>("is_eu", Boolean.class);
+  public static final IpdataField<Boolean> IS_SATELLITE = new IpdataField<Boolean>("is_satellite", Boolean.class);
+  public static final IpdataField<Boolean> IS_ANYCAST = new IpdataField<Boolean>("is_anycast", Boolean.class);
   public static final IpdataField<String> CITY = new IpdataField<String>("city", String.class);
   public static final IpdataField<String> REGION = new IpdataField<String>("region", String.class);
   public static final IpdataField<String> REGION_CODE = new IpdataField<String>("region_code", String.class);

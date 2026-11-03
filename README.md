@@ -11,6 +11,7 @@ An 100% compliant [ipdata.co](https://ipdata.co) API java client.
   - [Configuration](#configuration)
   - [API](#create-an-instance)
     - [Basic Usage](#basic-usage)
+    - [Connection reuse and HTTP/2](#connection-reuse-and-http2)
     - [Single Field Selection](#single-field-selection)
     - [Multiple Field Selection](#multiple-field-selection)
     - [Bulk data](#bulk-data)
@@ -22,7 +23,7 @@ You can have the library from Maven Central.
 <dependency>
     <groupId>co.ipdata.client</groupId>
     <artifactId>ipdata-java-client</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -143,12 +144,49 @@ Output:
 }
 ```
 
+The following fields were added to the API responses recently and are mapped by the model (every other field is described in the [API reference](https://docs.ipdata.co/api-reference/response-fields)):
+
+- `is_satellite` – `model.isSatellite()`: the address belongs to a satellite ISP. The API sends the key only when it is `true`; the model reads `false` when it is absent.
+- `is_anycast` – `model.isAnycast()`: the address is an anycast address (`8.8.8.8` for example). Same present-only-when-true behaviour.
+- `threat.blocklists[].first_seen` – `Blocklist.getFirstSeen()`: the first day the address was seen on that blocklist, as a `YYYY-MM-DD` (UTC) string, or `null` when the feed does not report it.
+- `threat.blocklists[].last_seen` – `Blocklist.getLastSeen()`: the most recent such day, same format, or `null`.
+- `threat.blocklists[].days_seen` – `Blocklist.getDaysSeen()`: the number of days the address was seen on that blocklist, as an `Integer`, or `null`.
+
+#### Connection reuse and HTTP/2
+An `IpdataService` keeps a persistent HTTPS connection pool for as long as it lives. Create one service per process (or one per API key or endpoint), keep it, and reuse it for every lookup: each new service pays a fresh TLS handshake. Requests to api.ipdata.co are multiplexed over HTTP/2 when the platform negotiates it, and fall back to HTTP/1.1 keep-alive otherwise.
+
+`IpdataService` is thread-safe: share one instance between threads. The full-model, single-field and bulk calls all go through the same pool. There is nothing to close: the default transport is the JDK's `java.net.http.HttpClient` (through `feign-java11`), which has no close method on Java 11 and drops idle connections on its own (it has no per-instance idle setting; the `jdk.httpclient.keepalive.timeout` system property, 1200 seconds by default, applies). A request whose transport call fails with an `IOException`, for example on a pooled connection the server had already closed, is re-sent by Feign's default `Retryer`, exactly as before; HTTP error statuses are never retried.
+
+Timeouts default to 10 seconds to connect and 60 seconds to read and are set on the builder, either one by one or as any `feign.Request.Options`:
+```java
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY")
+      .connectTimeout(5, TimeUnit.SECONDS)
+      .readTimeout(30, TimeUnit.SECONDS)
+      .get();
+
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY")
+      .options(new Request.Options(5, TimeUnit.SECONDS, 30, TimeUnit.SECONDS, true))
+      .get();
+```
+
+To use another HTTP stack, pass a `feign.Client` to `feignClient(...)`, for example Apache HttpClient (`io.github.openfeign:feign-httpclient`) or OkHttp (`io.github.openfeign:feign-okhttp`). The injected client is shared by all calls of that service, so configure its connection pooling there; the timeouts above are handed to it on every request:
+```java
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY")
+      .feignClient(new ApacheHttpClient(HttpClientBuilder.create().build()))
+      .get();
+```
+
 #### Single Field Selection
 If you're interested in only one field from the model capturing an IP address information, The service interface
 exposes a method on each available field:
 
 ```java
 boolean isEu = ipdataService.isEu("1.1.1.1");
+boolean isSatellite = ipdataService.isSatellite("1.1.1.1");
+boolean isAnycast = ipdataService.isAnycast("1.1.1.1");
 AsnModel asn = ipdataService.asn("1.1.1.1");
 TimeZone tz  = ipdataService.timeZone("1.1.1.1");
 ThreatModel threat = ipdataService.threat("1.1.1.1");
@@ -164,6 +202,7 @@ import io.ipdata.client.service.IpdataService;
 
 /* The model will be hydrated by the selected fields only */
 IpdataModel model = ipdataService.getFields("1.1.1.1", IpdataField.ASN, IpdataField.CURRENCY);
+IpdataModel flags = ipdataService.getFields("1.1.1.1", IpdataField.IS_SATELLITE, IpdataField.IS_ANYCAST);
 
 ```
 
