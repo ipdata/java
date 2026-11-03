@@ -21,6 +21,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
@@ -71,7 +72,8 @@ public class TestContext {
   }
 
   /*
-    Used to get responses of a raw http call, without logical proxying
+    Used to get responses of a raw http call, without logical proxying.
+    Bodies are always decoded as UTF-8, whatever the platform default charset is.
   */
   @SneakyThrows
   String get(String path, Map<String, String> params) {
@@ -84,7 +86,7 @@ public class TestContext {
     }
     HttpGet httpget = new HttpGet(builder.build());
     HttpResponse response = httpClient.execute(httpget);
-    return CharStreams.toString(new InputStreamReader(response.getEntity().getContent()));
+    return CharStreams.toString(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
   }
 
   @SneakyThrows
@@ -97,9 +99,9 @@ public class TestContext {
       }
     }
     HttpPost httpPost = new HttpPost(builder.build());
-    httpPost.setEntity(new StringEntity(content));
+    httpPost.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
     HttpResponse response = httpClient.execute(httpPost);
-    return CharStreams.toString(new InputStreamReader(response.getEntity().getContent()));
+    return CharStreams.toString(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
   }
 
 
