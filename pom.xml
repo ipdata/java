@@ -40,6 +40,9 @@
     <version.build.jacoco>0.8.14</version.build.jacoco>
     <version.build.surefire>3.5.5</version.build.surefire>
     <version.client.feign>11.10</version.client.feign>
+    <version.client.jackson>2.22.4</version.client.jackson>
+    <!-- jackson-annotations is released once per minor line (2.20, 2.21, 2.22, ...) -->
+    <version.client.jackson.annotations>2.22</version.client.jackson.annotations>
   </properties>
   <dependencies>
     <dependency>
@@ -58,6 +61,16 @@
       <version>${version.client.feign}</version>
     </dependency>
     <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${version.client.jackson}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${version.client.jackson.annotations}</version>
+    </dependency>
+    <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-httpclient</artifactId>
       <version>${version.client.feign}</version>
@@ -66,7 +79,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>33.4.8-jre</version>
+      <version>33.7.2-jre</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

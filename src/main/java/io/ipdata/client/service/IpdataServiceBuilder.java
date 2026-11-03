@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.time.Duration;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 
@@ -64,7 +65,7 @@ public class IpdataServiceBuilder {
   public IpdataService build() {
     final ObjectMapper mapper = new ObjectMapper();
     mapper.setPropertyNamingStrategy(SNAKE_CASE);
-    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
@@ -98,13 +99,14 @@ public class IpdataServiceBuilder {
       .target(IpdataInternalSingleFieldClient.class, url.toString());
 
     if (cacheConfig != null) {
+      final Duration expiry = Duration.of(cacheConfig.timeout(), cacheConfig.unit().toChronoUnit());
       CachingInternalClient cachingInternalClient = CachingInternalClient.builder()
         .expiry(cacheConfig.timeout())
         .unit(cacheConfig.unit())
         .maxSize(cacheConfig.maxSize())
         .ipdataCache(
           CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
+            .expireAfterWrite(expiry)
             .maximumSize(cacheConfig.maxSize())
             .build(new CacheLoader<String, IpdataModel>() {
               @Override
@@ -115,7 +117,7 @@ public class IpdataServiceBuilder {
         )
         .fieldsCache(
           CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
+            .expireAfterWrite(expiry)
             .maximumSize(cacheConfig.maxSize())
             .build(new CacheLoader<HashPair<String, String>, IpdataModel>() {
               @Override
@@ -126,7 +128,7 @@ public class IpdataServiceBuilder {
         )
         .asnCache(
           CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
+            .expireAfterWrite(expiry)
             .maximumSize(cacheConfig.maxSize())
             .build(new CacheLoader<String, AsnModel>() {
               @Override
@@ -137,7 +139,7 @@ public class IpdataServiceBuilder {
         )
         .tzCache(
           CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
+            .expireAfterWrite(expiry)
             .maximumSize(cacheConfig.maxSize())
             .build(new CacheLoader<String, TimeZone>() {
               @Override
@@ -148,7 +150,7 @@ public class IpdataServiceBuilder {
         )
         .currencyCache(
           CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
+            .expireAfterWrite(expiry)
             .maximumSize(cacheConfig.maxSize())
             .build(new CacheLoader<String, Currency>() {
               @Override
@@ -159,7 +161,7 @@ public class IpdataServiceBuilder {
         )
         .threatCache(
           CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheConfig.timeout(), cacheConfig.unit())
+            .expireAfterWrite(expiry)
             .maximumSize(cacheConfig.maxSize())
             .build(new CacheLoader<String, ThreatModel>() {
               @Override
