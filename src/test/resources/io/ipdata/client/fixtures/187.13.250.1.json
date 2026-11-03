@@ -32,7 +32,8 @@
   "languages": [
     {
       "name": "Portuguese",
-      "native": "Português"
+      "native": "Português",
+      "code": "pt"
     }
   ],
   "currency": {

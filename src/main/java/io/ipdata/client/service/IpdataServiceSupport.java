@@ -21,12 +21,12 @@ class IpdataServiceSupport implements IpdataService {
   private final IpdataInternalSingleFieldClient singleFieldClient;
 
   @Delegate(types = IpdataInternalClient.class)
-  public IpdataInternalClient getSingleFieldClient() {
+  private IpdataInternalClient getApi() {
     return api;
   }
 
   @Delegate(types = IpdataInternalSingleFieldClient.class)
-  private IpdataInternalSingleFieldClient getApi() {
+  private IpdataInternalSingleFieldClient getSingleFieldClient() {
     return singleFieldClient;
   }
 

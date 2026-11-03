@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -30,7 +31,7 @@ public class ApiErrorDecoder implements ErrorDecoder {
       URL url = new URL(response.request().url());
       logger.error("An error occurred during an Ipdata API call: got status '{}' for path '{}'",
         responseCode, url.getPath());
-      message = CharStreams.toString(response.body().asReader());
+      message = CharStreams.toString(response.body().asReader(StandardCharsets.UTF_8));
       Error error = mapper.readValue(message, Error.class);
       if (responseCode == RATE_LIMIT_STATUS) {
         return new RateLimitException(error.getMessage(), responseCode);

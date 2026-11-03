@@ -11,9 +11,9 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -212,7 +212,7 @@ public class MockIpdataServer {
   }
 
   private void handleBulk(HttpExchange exchange) throws IOException {
-    String body = CharStreams.toString(new InputStreamReader(exchange.getRequestBody()));
+    String body = CharStreams.toString(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
     String[] ips = mapper.readValue(body, String[].class);
     ArrayNode result = mapper.createArrayNode();
     for (String ip : ips) {
@@ -225,7 +225,7 @@ public class MockIpdataServer {
   }
 
   private void sendResponse(HttpExchange exchange, int status, String body) throws IOException {
-    byte[] bytes = body.getBytes("UTF-8");
+    byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
     exchange.getResponseHeaders().set("Content-Type", "application/json");
     exchange.sendResponseHeaders(status, bytes.length);
     exchange.getResponseBody().write(bytes);
@@ -243,11 +243,7 @@ public class MockIpdataServer {
       for (String param : rawQuery.split("&")) {
         String[] pair = param.split("=", 2);
         if (pair.length == 2) {
-          try {
-            params.put(URLDecoder.decode(pair[0], "UTF-8"), URLDecoder.decode(pair[1], "UTF-8"));
-          } catch (UnsupportedEncodingException e) {
-            params.put(pair[0], pair[1]);
-          }
+          params.put(URLDecoder.decode(pair[0], StandardCharsets.UTF_8), URLDecoder.decode(pair[1], StandardCharsets.UTF_8));
         }
       }
     }

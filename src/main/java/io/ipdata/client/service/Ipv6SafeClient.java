@@ -36,7 +36,7 @@ class Ipv6SafeClient implements Client {
       String fixedUrl = fixedPath + query;
       request = Request.create(
         request.httpMethod(), fixedUrl, request.headers(),
-        request.body(), request.charset()
+        request.body(), request.charset(), request.requestTemplate()
       );
     }
     return delegate.execute(request, options);
