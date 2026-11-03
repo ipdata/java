@@ -9,7 +9,7 @@ An 100% compliant [ipdata.co](https://ipdata.co) API java client.
 - [Install](#install)
 - [Use](#use)
   - [Configuration](#configuration)
-  - [API](#create-an-instance)
+  - [API](#api)
     - [Basic Usage](#basic-usage)
     - [Connection reuse and HTTP/2](#connection-reuse-and-http2)
     - [Single Field Selection](#single-field-selection)
@@ -81,30 +81,38 @@ Output:
 {
     "ip": "1.1.1.1",
     "is_eu": false,
-    "city": null,
-    "region": null,
-    "region_code": null,
-    "region_type": null,
-    "country_name": "Australia",
-    "country_code": "AU",
-    "continent_name": "Oceania",
-    "continent_code": "OC",
-    "latitude": -33.494,
-    "longitude": 143.2104,
-    "postal": null,
-    "calling_code": "61",
-    "flag": "https://ipdata.co/flags/au.png",
-    "emoji_flag": "\ud83c\udde6\ud83c\uddfa",
-    "emoji_unicode": "U+1F1E6 U+1F1FA",
+    "is_satellite": false,
+    "is_anycast": false,
+    "city": "Los Angeles",
+    "organisation": null,
+    "region": "California",
+    "region_code": "CA",
+    "region_type": "state",
+    "country_name": "United States",
+    "country_code": "US",
+    "continent_name": "North America",
+    "continent_code": "NA",
+    "latitude": 34.0522,
+    "longitude": -118.2437,
+    "postal": "90001",
+    "calling_code": "1",
+    "flag": "https://ipdata.co/flags/us.png",
+    "emoji_flag": "\ud83c\uddfa\ud83c\uddf8",
+    "emoji_unicode": "U+1F1FA U+1F1F8",
     "asn": {
         "asn": "AS13335",
-        "name": "Cloudflare, Inc.",
+        "name": "Cloudflare Inc",
         "domain": "cloudflare.com",
         "route": "1.1.1.0/24",
         "type": "hosting"
     },
+    "carrier": {
+        "name": "Cloudflare",
+        "mcc": "310",
+        "mnc": "000"
+    },
     "company": {
-        "name": "Cloudflare, Inc.",
+        "name": "Cloudflare Inc",
         "domain": "cloudflare.com",
         "network": "1.1.1.0/24",
         "type": "hosting"
@@ -112,25 +120,28 @@ Output:
     "languages": [
         {
             "name": "English",
-            "native": "English"
+            "native": "English",
+            "code": "en",
+            "rtl": 0
         }
     ],
     "currency": {
-        "name": "Australian Dollar",
-        "code": "AUD",
-        "symbol": "AU$",
+        "name": "US Dollar",
+        "code": "USD",
+        "symbol": "$",
         "native": "$",
-        "plural": "Australian dollars"
+        "plural": "US dollars"
     },
     "time_zone": {
-        "name": "Australia/Sydney",
-        "abbr": "AEDT",
-        "offset": "+1100",
+        "name": "America/Los_Angeles",
+        "abbr": "PDT",
+        "offset": "-0700",
         "is_dst": true,
-        "current_time": "2020-01-29T20:22:52.283874+11:00"
+        "current_time": "2020-06-12T06:37:16.595612-07:00"
     },
     "threat": {
         "is_tor": false,
+        "is_vpn": false,
         "is_proxy": false,
         "is_anonymous": false,
         "is_known_attacker": false,
@@ -138,9 +149,16 @@ Output:
         "is_threat": false,
         "is_bogon": false,
         "is_icloud_relay": false,
-        "is_datacenter": false
+        "is_datacenter": false,
+        "blocklists": [],
+        "scores": {
+            "vpn_score": 0,
+            "proxy_score": 0,
+            "threat_score": 0,
+            "trust_score": 100
+        }
     },
-    "count": "0"
+    "count": "1500"
 }
 ```
 
@@ -151,6 +169,7 @@ The following fields were added to the API responses recently and are mapped by 
 - `threat.blocklists[].first_seen` – `Blocklist.getFirstSeen()`: the first day the address was seen on that blocklist, as a `YYYY-MM-DD` (UTC) string, or `null` when the feed does not report it.
 - `threat.blocklists[].last_seen` – `Blocklist.getLastSeen()`: the most recent such day, same format, or `null`.
 - `threat.blocklists[].days_seen` – `Blocklist.getDaysSeen()`: the number of days the address was seen on that blocklist, as an `Integer`, or `null`.
+- `languages[].code` – `Language.code()`: the code of the language (`en` for English), or `null` when the API does not send it.
 
 #### Connection reuse and HTTP/2
 An `IpdataService` keeps a persistent HTTPS connection pool for as long as it lives. Create one service per process (or one per API key or endpoint), keep it, and reuse it for every lookup: each new service pays a fresh TLS handshake. Requests to api.ipdata.co are multiplexed over HTTP/2 when the platform negotiates it, and fall back to HTTP/1.1 keep-alive otherwise.
@@ -206,7 +225,7 @@ IpdataModel flags = ipdataService.getFields("1.1.1.1", IpdataField.IS_SATELLITE,
 
 ```
 
-### Bulk data
+#### Bulk data
 You can as well get multiple responses at once by using the ``bulk`` api:
 
 ```java
