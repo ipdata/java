@@ -14,6 +14,18 @@ public class IpdataModel {
   private String ip;
   @JsonProperty("is_eu")
   private boolean eu;
+  /**
+   * The address belongs to a satellite ISP. The API sends the key only when it is true, so the field reads
+   * {@code false} when it is absent.
+   */
+  @JsonProperty("is_satellite")
+  private boolean satellite;
+  /**
+   * The address is an anycast address. The API sends the key only when it is true, so the field reads
+   * {@code false} when it is absent.
+   */
+  @JsonProperty("is_anycast")
+  private boolean anycast;
   private String city;
   private String organisation;
 
@@ -43,5 +55,13 @@ public class IpdataModel {
 
   public boolean isEu() {
     return eu;
+  }
+
+  public boolean isSatellite() {
+    return satellite;
+  }
+
+  public boolean isAnycast() {
+    return anycast;
   }
 }

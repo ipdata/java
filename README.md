@@ -144,6 +144,14 @@ Output:
 }
 ```
 
+The following fields were added to the API responses recently and are mapped by the model (every other field is described in the [API reference](https://docs.ipdata.co/api-reference/response-fields)):
+
+- `is_satellite` – `model.isSatellite()`: the address belongs to a satellite ISP. The API sends the key only when it is `true`; the model reads `false` when it is absent.
+- `is_anycast` – `model.isAnycast()`: the address is an anycast address (`8.8.8.8` for example). Same present-only-when-true behaviour.
+- `threat.blocklists[].first_seen` – `Blocklist.getFirstSeen()`: the first day the address was seen on that blocklist, as a `YYYY-MM-DD` (UTC) string, or `null` when the feed does not report it.
+- `threat.blocklists[].last_seen` – `Blocklist.getLastSeen()`: the most recent such day, same format, or `null`.
+- `threat.blocklists[].days_seen` – `Blocklist.getDaysSeen()`: the number of days the address was seen on that blocklist, as an `Integer`, or `null`.
+
 #### Connection reuse and HTTP/2
 An `IpdataService` keeps a persistent HTTPS connection pool for as long as it lives. Create one service per process (or one per API key or endpoint), keep it, and reuse it for every lookup: each new service pays a fresh TLS handshake. Requests to api.ipdata.co are multiplexed over HTTP/2 when the platform negotiates it, and fall back to HTTP/1.1 keep-alive otherwise.
 
@@ -177,6 +185,8 @@ exposes a method on each available field:
 
 ```java
 boolean isEu = ipdataService.isEu("1.1.1.1");
+boolean isSatellite = ipdataService.isSatellite("1.1.1.1");
+boolean isAnycast = ipdataService.isAnycast("1.1.1.1");
 AsnModel asn = ipdataService.asn("1.1.1.1");
 TimeZone tz  = ipdataService.timeZone("1.1.1.1");
 ThreatModel threat = ipdataService.threat("1.1.1.1");
@@ -192,6 +202,7 @@ import io.ipdata.client.service.IpdataService;
 
 /* The model will be hydrated by the selected fields only */
 IpdataModel model = ipdataService.getFields("1.1.1.1", IpdataField.ASN, IpdataField.CURRENCY);
+IpdataModel flags = ipdataService.getFields("1.1.1.1", IpdataField.IS_SATELLITE, IpdataField.IS_ANYCAST);
 
 ```
 
