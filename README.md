@@ -15,6 +15,7 @@ An 100% compliant [ipdata.co](https://ipdata.co) API java client.
     - [Single Field Selection](#single-field-selection)
     - [Multiple Field Selection](#multiple-field-selection)
     - [Bulk data](#bulk-data)
+- [Releasing](#releasing)
   
 
 ## Install
@@ -232,5 +233,10 @@ You can as well get multiple responses at once by using the ``bulk`` api:
 List<IpdataModel> models = ipdataService.bulk(Arrays.asList("1.1.1.1", "8.8.8.8"));
 ```
 
+## Releasing
+Releases are cut by CI from the version declared in `pom.xml`; there is no need to push a tag by hand:
 
+1. Bump the `<version>` of the project in `pom.xml` (and the install snippet above) in a pull request and merge it.
+2. CI tags the merge commit `vx.y.z`, creates the GitHub release with generated notes and publishes the artifacts to Maven Central.
 
+A merge whose version is already tagged publishes nothing. Pushing a `v*` tag by hand still publishes that tag's commit, as before.

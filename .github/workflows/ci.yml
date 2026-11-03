@@ -28,3 +28,61 @@ jobs:
 
       - name: Build and Test
         run: mvn clean test post-integration-test
+
+  # Tags and releases the version declared in pom.xml once it reaches the
+  # default branch. A version that is already tagged is left alone.
+  release:
+    needs: test
+    if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      created: ${{ steps.release.outputs.created }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the version from pom.xml
+        id: version
+        run: |
+          VERSION=$(awk '/<artifactId>ipdata-java-client<\/artifactId>/{f=1} f&&/<version>/{sub(/.*<version>/,"");sub(/<\/version>.*/,"");print;exit}' pom.xml)
+          if [ -z "$VERSION" ]; then
+            echo "::error file=pom.xml::Could not read the project version"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create the tag and the GitHub release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          status=0
+          git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null || status=$?
+          if [ "$status" -eq 0 ]; then
+            echo "Tag $TAG already exists; nothing to release."
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          elif [ "$status" -ne 2 ]; then
+            echo "::error::git ls-remote failed with status $status"
+            exit "$status"
+          fi
+          gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --generate-notes
+          echo "Created tag and release $TAG."
+          echo "created=true" >> "$GITHUB_OUTPUT"
+
+  # A tag created with the workflow token does not trigger the Release
+  # workflow on its own, so the Maven Central deploy runs in this run.
+  publish:
+    needs: release
+    if: needs.release.outputs.created == 'true'
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+    secrets: inherit
