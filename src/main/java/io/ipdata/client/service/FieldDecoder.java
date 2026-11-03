@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The API returns usable but invalid(/unquoted) strings for String fields
@@ -22,7 +23,7 @@ class FieldDecoder implements Decoder {
   @Override
   public Object decode(Response response, Type type) throws IOException {
     if (type.equals(String.class)) {
-      return CharStreams.toString(response.body().asReader());
+      return CharStreams.toString(response.body().asReader(StandardCharsets.UTF_8));
     }
     return mapper.readValue(response.body().asInputStream(), mapper.constructType(type));
   }
