@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,9 @@ public class MockIpdataServer {
   private final Map<String, JsonNode> fixtures = new HashMap<>();
   private final ObjectMapper mapper = new ObjectMapper();
   private volatile String lastRawPath;
+  private volatile String lastProtocol;
+  /** The client socket address (IP and ephemeral port) of every request received, in order. */
+  private final List<InetSocketAddress> remoteAddresses = Collections.synchronizedList(new ArrayList<>());
 
   private MockIpdataServer() {
     try {
@@ -59,6 +63,28 @@ public class MockIpdataServer {
     return lastRawPath;
   }
 
+  /** @return the protocol of the last request received, for example {@code HTTP/1.1} */
+  public String getLastProtocol() {
+    return lastProtocol;
+  }
+
+  /**
+   * @return the client socket address of the last request received; two requests carrying the same address
+   * (same ephemeral port) arrived on the same TCP connection
+   */
+  public InetSocketAddress getLastRemoteAddress() {
+    synchronized (remoteAddresses) {
+      return remoteAddresses.isEmpty() ? null : remoteAddresses.get(remoteAddresses.size() - 1);
+    }
+  }
+
+  /** @return a snapshot of the client socket addresses of all requests received so far, in order */
+  public List<InetSocketAddress> getRemoteAddresses() {
+    synchronized (remoteAddresses) {
+      return new ArrayList<>(remoteAddresses);
+    }
+  }
+
   private void loadFixtures() {
     String[] ips = {"8.8.8.8", "2001:4860:4860::8888", "1.1.1.1", "2001:4860:4860::8844", "41.128.21.123"};
     for (String ip : ips) {
@@ -75,6 +101,8 @@ public class MockIpdataServer {
 
   private void handleRequest(HttpExchange exchange) throws IOException {
     try {
+      remoteAddresses.add(exchange.getRemoteAddress());
+      lastProtocol = exchange.getProtocol();
       String method = exchange.getRequestMethod();
       String path = exchange.getRequestURI().getPath();
       lastRawPath = exchange.getRequestURI().getRawPath();

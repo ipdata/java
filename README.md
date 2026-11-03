@@ -11,6 +11,7 @@ An 100% compliant [ipdata.co](https://ipdata.co) API java client.
   - [Configuration](#configuration)
   - [API](#create-an-instance)
     - [Basic Usage](#basic-usage)
+    - [Connection reuse and HTTP/2](#connection-reuse-and-http2)
     - [Single Field Selection](#single-field-selection)
     - [Multiple Field Selection](#multiple-field-selection)
     - [Bulk data](#bulk-data)
@@ -22,7 +23,7 @@ You can have the library from Maven Central.
 <dependency>
     <groupId>co.ipdata.client</groupId>
     <artifactId>ipdata-java-client</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -141,6 +142,33 @@ Output:
     },
     "count": "0"
 }
+```
+
+#### Connection reuse and HTTP/2
+An `IpdataService` keeps a persistent HTTPS connection pool for as long as it lives. Create one service per process (or one per API key or endpoint), keep it, and reuse it for every lookup: each new service pays a fresh TLS handshake. Requests to api.ipdata.co are multiplexed over HTTP/2 when the platform negotiates it, and fall back to HTTP/1.1 keep-alive otherwise.
+
+`IpdataService` is thread-safe: share one instance between threads. The full-model, single-field and bulk calls all go through the same pool. There is nothing to close: the default transport is the JDK's `java.net.http.HttpClient` (through `feign-java11`), which has no close method on Java 11 and drops idle connections on its own (it has no per-instance idle setting; the `jdk.httpclient.keepalive.timeout` system property, 1200 seconds by default, applies). A request whose transport call fails with an `IOException`, for example on a pooled connection the server had already closed, is re-sent by Feign's default `Retryer`, exactly as before; HTTP error statuses are never retried.
+
+Timeouts default to 10 seconds to connect and 60 seconds to read and are set on the builder, either one by one or as any `feign.Request.Options`:
+```java
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY")
+      .connectTimeout(5, TimeUnit.SECONDS)
+      .readTimeout(30, TimeUnit.SECONDS)
+      .get();
+
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY")
+      .options(new Request.Options(5, TimeUnit.SECONDS, 30, TimeUnit.SECONDS, true))
+      .get();
+```
+
+To use another HTTP stack, pass a `feign.Client` to `feignClient(...)`, for example Apache HttpClient (`io.github.openfeign:feign-httpclient`) or OkHttp (`io.github.openfeign:feign-okhttp`). The injected client is shared by all calls of that service, so configure its connection pooling there; the timeouts above are handed to it on every request:
+```java
+IpdataService ipdataService = Ipdata.builder().url(url)
+      .key("MY_KEY")
+      .feignClient(new ApacheHttpClient(HttpClientBuilder.create().build()))
+      .get();
 ```
 
 #### Single Field Selection

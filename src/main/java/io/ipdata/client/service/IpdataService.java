@@ -14,6 +14,11 @@ import java.util.List;
  * <p>
  * Also exposes single-field accessors (e.g. {@code getCountryName}, {@code getCity})
  * inherited from {@link IpdataInternalSingleFieldClient}.
+ * <p>
+ * A service owns one persistent HTTP connection pool, shared by all of its methods: requests are multiplexed
+ * over HTTP/2 when the server negotiates it and use HTTP/1.1 keep-alive otherwise. Create one instance per
+ * API key or endpoint, keep it for the lifetime of the application and share it between threads (it is
+ * thread-safe); every new instance pays a fresh TLS handshake. There is nothing to close.
  *
  * @see io.ipdata.client.Ipdata#builder()
  */
